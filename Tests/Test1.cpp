@@ -55,11 +55,11 @@ TEST(Test2, BasicGraphTesting)
 {
 	Graph G();
 
-	EXPECT_EQ(G.add("a") , "add vertex a")
-	EXPECT_EQ(G.add("b") , "add vertex b")
-	EXPECT_EQ(G.add("c") , "add vertex c")
-	EXPECT_EQ(G.add("d") , "add vertex d")
-	EXPECT_EQ(G.add("e") , "add vertex e")
+	EXPECT_EQ(G.add("a") , "add vertex a");
+	EXPECT_EQ(G.add("b") , "add vertex b");
+	EXPECT_EQ(G.add("c") , "add vertex c");
+	EXPECT_EQ(G.add("d") , "add vertex d");
+	EXPECT_EQ(G.add("e") , "add vertex e");
 
 //   Graph G;
 //   assert(G.add("a") && "add vertex a");
