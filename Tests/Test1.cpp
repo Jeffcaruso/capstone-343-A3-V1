@@ -53,7 +53,7 @@ static string map2string(const map<K, L> &Mp) {
 
 TEST(Test2, BasicGraphTesting)
 {
-	Graph G();
+	Graph G(true);
 
 	EXPECT_EQ(G.add("a") , "add vertex a");
 	EXPECT_EQ(G.add("b") , "add vertex b");
