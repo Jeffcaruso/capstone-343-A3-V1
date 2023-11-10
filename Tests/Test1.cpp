@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/bst.h"
+#include "applib/graph.h"
 
 #include <iostream>
 #include <sstream>
