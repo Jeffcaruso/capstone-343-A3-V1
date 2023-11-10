@@ -16,85 +16,77 @@
 
 using namespace std;
 
-//note, I tried to do student testing. Some to all of them did bstMap instead...
-// how should this be handled for moving forward... Is there something in the project that was removed/
-//  re-defined. As far as testing, I guess I could still grab the student code with changing it, but that would certainly take longer...
-
-/**
- * Testing BST - Binary Search Tree functions
- *
- * This file has series of tests for BST
- * Each test is independent and uses assert statements
- * Test functions are of the form
- *
- *      test_netidXX()
- *
- * where netid is UW netid and XX is the test number starting from 01
- *
- * Test functions can only use the public functions from BST
- * testBSTAll() is called from main in main.cpp
- * testBSTAll calls all other functions
- * @author Multiple
- * @date ongoing
- */
-
 /**
  * Trying to avoid global variables,
  * by creating a singleton class with our visitor functions
  * stringstream SS contains the output from visitor
  */
-class TreeVisitor
-{
+class Tester {
 public:
-	// never create an instance of TreeVisitor object
-	// we'll just use the static functions
-	TreeVisitor() = delete;
-
-	// insert output to SS rather than cout, so we can test it
-	static stringstream SS;
-
-	// get SS as a string
-	static string getSS() { return SS.str(); }
-
-	// set SS to be empty string
-	static void resetSS() { SS.str(string()); }
-
-	// instead of cout, insert item into SS, a stringstream object
-	static void visitor(const string &Item) { SS << Item; }
-
-	// instead of cout, insert item into SS, a stringstream object
-	static void visitor(const int &Item) { SS << Item; }
+  Tester() = delete;
+  // insert output to SS rather than cout, so we can test it
+  static stringstream SS;
+  static string getSs() { return SS.str(); }
+  static void resetSs() { SS.str(string()); }
+  // visitor function used for DFS and BFS
+  static void labelVisitor(const string &Label) { SS << Label; }
+  // visitor function used for edges for minimum spanning tree
+  static void edgeVisitor(const string &From, const string &To, int Weight) {
+    SS << "[" << From << To << " " << Weight << "]";
+  }
 };
 
 // initialize the static variable
-//  warning: initialization of 'SS' with static storage duration
-//  may throw an exception that cannot be caught [cert-err58-cpp]
-//  Not sure how to do it without making code harder to read
-//  NOLINTNEXTLINE
-stringstream TreeVisitor::SS;
+// NOLINTNEXTLINE
+stringstream Tester::SS;
 
-template <class T>
-void visitorSimple(const T &Item)
-{
-	cout << "visitorSimple: " << Item;
+// convert a map to a string so we can compare it
+template <typename K, typename L>
+static string map2string(const map<K, L> &Mp) {
+  stringstream Out;
+  for (auto &P : Mp)
+    Out << "[" << P.first << ":" << P.second << "]";
+  return Out.str();
 }
 
-// Testing ==
-TEST(Test1, TestEquality)
+
+
+TEST(Test2, BasicGraphTesting)
 {
-	BST<string> B1;
-	BST<string> B2;
-	BST<string> B3;
+	Graph G;
 
-	//test equality operators
-	EXPECT_TRUE(B1 == B2 && (!(B1 != B2)));
-	//add letters
-	B1.add("c");
-	B2.add("c");
-	B3.add("b");
+	EXPECT_EQUAL(G.add("a") , "add vertex a")
 
-	// testing equality
-	EXPECT_TRUE(B1 == B2 && (!(B1 != B2)));
-	// testing equality
-	EXPECT_TRUE(B1 != B2 && (!(B1 == B3)));
+//   Graph G;
+//   assert(G.add("a") && "add vertex a");
+//   assert(G.add("b") && "add vertex b");
+//   assert(G.add("c") && "add vertex c");
+//   assert(G.add("d") && "add vertex d");
+//   assert(G.add("e") && "add vertex e");
+
+
+
+//   assert(!G.add("b") && "b added twice");
+//   assert(G.connect("a", "b", 10) && "connect a b");
+//   assert(!G.connect("a", "b", 50) && "duplicate connect a b");
+//   assert(!G.connect("a", "a", 1) && "connect a to itself");
+//   G.connect("a", "d", 40);
+//   G.connect("a", "c", 20);
+//   assert((G.verticesSize() == 5) && "graph number of vertices");
+//   assert((G.edgesSize() == 3) && "graph number of edges");
+//   assert((G.neighborsSize("a") == 3) && "vertex number of edges");
+//   assert((G.neighborsSize("c") == 0) && "no outgoing edges c");
+//   assert((G.neighborsSize("xxx") == -1) && "no edges for xxx");
+//   assert(!G.contains("xxx") && "xxx not in graph");
+//   assert(G.contains("a") && "a in graph");
+
+//   // check that they are sorted based on edge end label
+//   assert(G.getEdgesAsString("a") == "b(10),c(20),d(40)");
+//   // disconnect non-existent edge/vertex
+//   assert(!G.disconnect("a", "e") && "disconnecting non-existent vertex");
+//   assert((G.edgesSize() == 3) && "disconnected nonexisting");
+//   assert(G.disconnect("a", "c") && "a-c disconnect");
+//   assert((G.edgesSize() == 2) && "number of edges after disconnect");
+//   assert((G.neighborsSize("a") == 2) && "a has 2 edges");
+//   assert(G.getEdgesAsString("a") == "b(10),d(40)" && "removing middle edge");
 }
