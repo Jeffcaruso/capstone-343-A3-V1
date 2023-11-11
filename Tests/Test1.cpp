@@ -91,5 +91,11 @@ TEST(Test1, BasicGraphTesting)
 
 
 	// disconnect (non-)existent edge/vertex
-
+	EXPECT_FALSE(G.disconnect("a", "e")); // disconnecting non-existent vertex
+	EXPECT_EQ(G.edgesSize(), 3); // post disconnected non-existing
+	EXPECT_TRUE(G.disconnect("a", "c")); // a-c disconnect (existing)
+	EXPECT_EQ(G.edgesSize(), 2); // number of edges after disconnect
+	EXPECT_EQ(G.neighborsSize("a"), 2); // a has 2 edges
+	expectedAns = "b(10),d(40)";
+	EXPECT_EQ(G.getEdgesAsString("a"), expectedAns); // removing middle edge
 }
