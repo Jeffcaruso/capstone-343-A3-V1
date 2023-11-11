@@ -51,12 +51,17 @@ static string map2string(const map<K, L> &Mp) {
 
 
 
-TEST(Test2, BasicGraphTesting)
+TEST(Test1, BasicGraphTesting)
 {
 	Graph G(true);
 
   //maybe add
-  EXPECT_TRUE(G.add("a"));
+  EXPECT_TRUE(G.add("a")); //add vertext a
+  EXPECT_TRUE(G.add("b")); //add vertext b
+  EXPECT_TRUE(G.add("c")); //add vertext c
+  EXPECT_TRUE(G.add("d")); //add vertext d
+  EXPECT_TRUE(G.add("e")); //add vertext e
+
 
 // alt approach (prior, did not work)
 	// EXPECT_EQ(G.add("a") , "add vertex a");
