@@ -79,7 +79,7 @@ TEST(Test1, BasicGraphTesting)
 	EXPECT_EQ(G.edgesSize(), 3); // graph number of edges
 	//test neighbors size
 	EXPECT_EQ(G.neighborsSize("a"), 3); // vertex number of edges
-	EXPECT_EQ(G.neighborsSize("c") == 0); // no outgoing edges c
+	EXPECT_EQ(G.neighborsSize("c"), 0); // no outgoing edges c
 	EXPECT_EQ(G.neighborsSize("xxx"), -1); // no edges for xxx
 	//test contains
 	EXPECT_FALSE(G.contains("xxx")); // xxx not in graph
