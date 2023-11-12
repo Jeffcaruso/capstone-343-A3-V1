@@ -110,39 +110,68 @@ TEST(Test5, testGraph0NotDirected)
 
     // Testing Pt.2.. (also not sure, consider if this can be safely moved to a second test method in this file...)
 
-    //   map<string, int> Weights;
-    //   map<string, string> Previous;
-    //   tie(Weights, Previous) = G.dijkstra("A");
-    //   // cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
-    //   assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
-    //   // cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
-    //   assert(map2string(Previous) == "[B:A][C:B]" && "Dijkstra(A) previous");
+    // 5.2.1
+    map<string, int> Weights;
+    map<string, string> Previous;
+    tie(Weights, Previous) = G.dijkstra("A");
+    // cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
+    string ansStr = "[B:1][C:4]";
+    EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
+    // assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
+    //  cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
+    ansStr = "[B:A][C:B]";
+    EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(A) previous
+    // assert(map2string(Previous) == "[B:A][C:B]" && "Dijkstra(A) previous");
 
-    //   tie(Weights, Previous) = G.dijkstra("B");
-    //   assert(map2string(Weights) == "[A:1][C:3]" && "Dijkstra(B) weights");
-    //   assert(map2string(Previous) == "[A:B][C:B]" && "Dijkstra(B) previous");
 
-    //   tie(Weights, Previous) = G.dijkstra("X");
-    //   assert(map2string(Weights).empty() && "Dijkstra(C) weights");
-    //   assert(map2string(Previous).empty() && "Dijkstra(C) previous");
+    // 5.2.2
+    tie(Weights, Previous) = G.dijkstra("B");
+    ansStr = "[A:1][C:3]";
+    EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(B) weights
+    //assert(map2string(Weights) == "[A:1][C:3]" && "Dijkstra(B) weights");
+    ansStr = "[A:B][C:B]";
+    EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(B) previous
+    //assert(map2string(Previous) == "[A:B][C:B]" && "Dijkstra(B) previous");
 
-    //   Tester::resetSs();
-    //   int MstLength = G.mst("A", Tester::edgeVisitor);
-    //   assert(MstLength == 4 && "mst A is 4");
-    //   assert(Tester::getSs() == "[AB 1][BC 3]" && "mst A is [AB 1][BC 3]");
+    // 5.2.3
+    tie(Weights, Previous) = G.dijkstra("X");
+    EXPECT_TRUE(map2string(Weights).empty()); // Dijkstra(C) weights
+    //assert(map2string(Weights).empty() && "Dijkstra(C) weights");
+    EXPECT_TRUE(map2string(Previous).empty()); // Dijkstra(C) previous
+    //assert(map2string(Previous).empty() && "Dijkstra(C) previous");
 
-    //   Tester::resetSs();
-    //   MstLength = G.mst("B", Tester::edgeVisitor);
-    //   assert(MstLength == 4 && "mst 4 is 4");
-    //   assert(Tester::getSs() == "[BA 1][BC 3]");
+    // 5.2.4
+    Tester::resetSs();
+    ansStr = "A";
+    int MstLength = G.mst(ansStr, Tester::edgeVisitor);
+    EXPECT_TRUE(MstLength == 4); // mst A is 4
+    //assert(MstLength == 4 && "mst A is 4");
+    ansStr = "[AB 1][BC 3]";
+    EXPECT_EQ(Tester::getSs(), ansStr) // mst A is [AB 1][BC 3]
+    //assert(Tester::getSs() == "[AB 1][BC 3]" && "mst A is [AB 1][BC 3]");
 
-    //   Tester::resetSs();
-    //   MstLength = G.mst("C", Tester::edgeVisitor);
-    //   assert(MstLength == 4 && "mst C is 4");
-    //   assert(Tester::getSs() == "[CB 3][BA 1]");
+    // 5.2.5
+    Tester::resetSs();
+    ansStr = "B";
+    MstLength = G.mst(ansStr, Tester::edgeVisitor);
+    EXPECT_TRUE(MstLength == 4); // mst 4 is 4
+    //assert(MstLength == 4 && "mst 4 is 4");
+    assert(Tester::getSs() == "[BA 1][BC 3]");
 
-    //   Tester::resetSs();
-    //   MstLength = G.mst("X", Tester::edgeVisitor);
-    //   assert(MstLength == -1 && "mst X is -1");
-    //   assert(Tester::getSs().empty() && "mst for vertex not found");
+    // 5.2.6
+    Tester::resetSs();
+    MstLength = G.mst("C", Tester::edgeVisitor);
+    EXPECT_TRUE(MstLength == 4); // mst C is 4
+    //assert(MstLength == 4 && "mst C is 4");
+    ansStr = "[CB 3][BA 1]";
+    EXPECT_EQ(Tester::getSs(), ansStr);
+    //assert(Tester::getSs() == "[CB 3][BA 1]");
+
+    // 5.2.7
+    Tester::resetSs();
+    MstLength = G.mst("X", Tester::edgeVisitor);
+    EXPECT_TRUE(MstLength == -1); // mst X is -1
+    //assert(MstLength == -1 && "mst X is -1");
+    EXPECT_TRUE(Tester::getSs().empty()); // mst for vertex not found
+    assert(Tester::getSs().empty() && "mst for vertex not found");
 }
