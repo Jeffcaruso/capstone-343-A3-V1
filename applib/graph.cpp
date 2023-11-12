@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>  //maybe gtest?
+
 #include "graph.h"
 #include <algorithm>
 #include <cassert>
