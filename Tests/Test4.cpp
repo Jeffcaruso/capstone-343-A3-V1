@@ -1,83 +1,103 @@
 //============================================================================
 // Name        : Test4
-// Test Desc.  : Student custom testing aka Testing samplefunctionality
-//				 	(coverage for old testSample01() method)
+// Test Desc.  : testing Dijkstra on graph 0
+//				 	(coverage for old testGraph0BFS(). was #2 test method...)
 // Author      : Jeffrey Caruso, Yusuf Pisan
 // Date    	   : Fall 2023
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/bst.h"
+#include "applib/graph.h"
 
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 using namespace std;
-
-/**
- * Testing BST - Binary Search Tree functions
- *
- * This file has series of tests for BST
- * Each test is independent and uses assert statements
- * Test functions are of the form
- *
- *      test_netidXX()
- *
- * where netid is UW netid and XX is the test number starting from 01
- *
- * Test functions can only use the public functions from BST
- * testBSTAll() is called from main in main.cpp
- * testBSTAll calls all other functions
- * @author Multiple
- * @date ongoing
- */
 
 /**
  * Trying to avoid global variables,
  * by creating a singleton class with our visitor functions
  * stringstream SS contains the output from visitor
  */
-
-class TreeVisitor {
+class Tester
+{
 public:
-  // never create an instance of TreeVisitor object
-  // we'll just use the static functions
-  TreeVisitor() = delete;
-
-  // insert output to SS rather than cout, so we can test it
-  static stringstream SS;
-
-  // get SS as a string
-  static string getSS() { return SS.str(); }
-
-  // set SS to be empty string
-  static void resetSS() { SS.str(string()); }
-
-  // instead of cout, insert item into SS, a stringstream object
-  static void visitor(const string &Item) { SS << Item; }
-
-  // instead of cout, insert item into SS, a stringstream object
-  static void visitor(const int &Item) { SS << Item; }
+	Tester() = delete;
+	// insert output to SS rather than cout, so we can test it
+	static stringstream SS;
+	static string getSs() { return SS.str(); }
+	static void resetSs() { SS.str(string()); }
+	// visitor function used for DFS and BFS
+	static void labelVisitor(const string &Label) { SS << Label; }
+	// visitor function used for edges for minimum spanning tree
+	static void edgeVisitor(const string &From, const string &To, int Weight)
+	{
+		SS << "[" << From << To << " " << Weight << "]";
+	}
 };
 
 // initialize the static variable
-//  warning: initialization of 'SS' with static storage duration
-//  may throw an exception that cannot be caught [cert-err58-cpp]
-//  Not sure how to do it without making code harder to read
-//  NOLINTNEXTLINE
-stringstream TreeVisitor::SS;
+// NOLINTNEXTLINE
+stringstream Tester::SS;
 
-template <class T> void visitorSimple(const T &Item) {
-  cout << "visitorSimple: " << Item;
-}
-
-
-// Student added test methods as desired to sample...
-TEST(Test4, sample01)
+// convert a map to a string so we can compare it
+template <typename K, typename L>
+static string map2string(const map<K, L> &Mp)
 {
-	//student may fill with tests
-
-	// no tests occuring within this should return true...
-	
+	stringstream Out;
+	for (auto &P : Mp)
+		Out << "[" << P.first << ":" << P.second << "]";
+	return Out.str();
 }
 
+/*
+ * Note, if testing is not working as expected, there is a decent chance of some degree of misconfigurations.
+ * I.E.   assert(G.contains("A") && "a in graph"); -> EXPECT_TRUE(G.contains("A")); // a in graph
+ * 				May not be as correct of an interpretation as I am expecting...
+ *
+ */
+
+
+
+// detailed == testing
+TEST(Test4, Graph0Dijkstra)
+{
+	// prep graph, read in graph0.txt
+	Graph G;
+	if (!G.readFile("graph0.txt"))
+		return;
+
+	// maps for weights (current) + previous
+	map<string, int> Weights;
+	map<string, string> Previous;
+
+	// T1.1
+	tie(Weights, Previous) = G.dijkstra("A");
+	// cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
+	string ansStr = "[B:1][C:4]";
+	EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
+	// assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
+	ansStr = "[B:A][C:B]";
+	EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(A) previous
+	// cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
+	// assert(map2string(Previous) == "[B:A][C:B]" && "Dijkstra(A) previous");
+
+	// T1.2
+	tie(Weights, Previous) = G.dijkstra("B");
+	string ansStr = "[C:3]";
+	EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(B) weights
+	// assert(map2string(Weights) == "[C:3]" && "Dijkstra(B) weights");
+	ansStr = "[C:B]";
+	EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(B) previous
+	// assert(map2string(Previous) == "[C:B]" && "Dijkstra(B) previous");
+
+	// T1.3
+	tie(Weights, Previous) = G.dijkstra("X");
+
+	EXPECT_TRUE(map2string(Weights).empty()); // Dijkstra(C) weights
+	// assert(map2string(Weights).empty() && "Dijkstra(C) weights");
+	EXPECT_TRUE(map2string(Previous).empty()) // Dijkstra(C) previous
+	// assert(map2string(Previous).empty() && "Dijkstra(C) previous");
+}

@@ -60,7 +60,7 @@ static string map2string(const map<K, L> &Mp)
  */
 
 // detailed == testing
-TEST(Test2, Graph0BFS)
+TEST(Test3, Graph0BFS)
 {
 	//prep graph, read in graph0.txt
 	Graph G;
