@@ -1,7 +1,7 @@
 //============================================================================
-// Name        : Test4
-// Test Desc.  : testing Dijkstra on graph 0
-//				 	(coverage for old testGraph0Dijkstra(). was #4 test method...)
+// Name        : Test5
+// Test Desc.  : testing undirected links on graph0
+//				 	(coverage for old testGraph0NotDirected(). was #5 test method...)
 // Author      : Jeffrey Caruso, Yusuf Pisan
 // Date    	   : Fall 2023
 //============================================================================
@@ -100,7 +100,7 @@ TEST(Test5, testGraph0NotDirected)
 
 
     //5.1.4
-    Tester::resetSs()
+    Tester::resetSs();
     ansStr = "X";
     G.dfs(ansStr, Tester::labelVisitor);
     EXPECT_TRUE(Tester::getSs().empty()); // starting from X
