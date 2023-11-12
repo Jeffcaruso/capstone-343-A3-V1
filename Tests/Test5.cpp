@@ -156,7 +156,9 @@ TEST(Test5, testGraph0NotDirected)
     MstLength = G.mst(ansStr, Tester::edgeVisitor);
     EXPECT_TRUE(MstLength == 4); // mst 4 is 4
     //assert(MstLength == 4 && "mst 4 is 4");
-    assert(Tester::getSs() == "[BA 1][BC 3]");
+    ansStr = "[BA 1][BC 3]";
+    EXPECT_EQ(Tester::getSs(), ansStr);
+    //assert(Tester::getSs() == "[BA 1][BC 3]");
 
     // 5.2.6
     Tester::resetSs();
@@ -173,5 +175,5 @@ TEST(Test5, testGraph0NotDirected)
     EXPECT_TRUE(MstLength == -1); // mst X is -1
     //assert(MstLength == -1 && "mst X is -1");
     EXPECT_TRUE(Tester::getSs().empty()); // mst for vertex not found
-    assert(Tester::getSs().empty() && "mst for vertex not found");
+    //assert(Tester::getSs().empty() && "mst for vertex not found");
 }
