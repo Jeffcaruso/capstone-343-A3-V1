@@ -80,7 +80,9 @@ public:
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
   int mst(const string &StartLabel,
-          void Visit(const string &From, const string &To, int Weight)) const;
+          void Visit(const string &From, const string &To, int Weight));
+
+          //also trying w/o const!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 private:
   // default is directional edges is true,
