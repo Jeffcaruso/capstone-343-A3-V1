@@ -71,7 +71,6 @@ TEST(Test2, Graph0BFS)
 	//// NEED TO CHECK IN ON USING BFS first time, then DFS the rest of the time...
 	/// ***
 
-
 	//A
 	Tester::resetSs();
 	string ansStr = "A";
@@ -80,22 +79,22 @@ TEST(Test2, Graph0BFS)
 	EXPECT_EQ(Tester::getSs(), ansStr); // starting from A
 
 	//B
-	Tester::resetSs()
-	string ansStr = "B";
+	Tester::resetSs();
+	ansStr = "B";
 	G.dfs(ansStr, Tester::labelVisitor);
 	ansStr = "BC";
 	EXPECT_EQ(Tester::getSs(), ansStr); // starting from B
 
 	//C
 	Tester::resetSs();
-	string ansStr = "C";
+	ansStr = "C";
 	G.dfs(ansStr, Tester::labelVisitor);
 	ansStr = "C";
 	EXPECT_EQ(Tester::getSs(), ansStr); // starting from C
 
 	//X
 	Tester::resetSs();
-	string ansStr = "X";
+	ansStr = "X";
 	G.dfs(ansStr, Tester::labelVisitor);
 	EXPECT_TRUE(Tester::getSs().empty()); // starting from X
 
