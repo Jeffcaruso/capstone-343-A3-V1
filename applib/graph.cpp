@@ -54,7 +54,11 @@ Graph::dijkstra(const string &StartLabel) const {
 int Graph::mst(const string &StartLabel,
                void Visit(const string &From, const string &To,
                           int Weight)) {
-  EXPECT_FALSE(DirectionalEdges);
+  TEST(Test5, testMST)
+  {
+    EXPECT_FALSE(DirectionalEdges);
+  }
+  
   //assert(!DirectionalEdges);
   return 0;
 }
