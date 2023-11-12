@@ -113,7 +113,8 @@ TEST(Test5, testGraph0NotDirected)
     // 5.2.1
     map<string, int> Weights;
     map<string, string> Previous;
-    tie(Weights, Previous) = G.dijkstra("A");
+    ansStr = "A";
+    tie(Weights, Previous) = G.dijkstra(ansStr);
     // cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
     ansStr = "[B:1][C:4]";
     EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
@@ -125,7 +126,8 @@ TEST(Test5, testGraph0NotDirected)
 
 
     // 5.2.2
-    tie(Weights, Previous) = G.dijkstra("B");
+    ansStr = "B";
+    tie(Weights, Previous) = G.dijkstra(ansStr);
     ansStr = "[A:1][C:3]";
     EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(B) weights
     //assert(map2string(Weights) == "[A:1][C:3]" && "Dijkstra(B) weights");
@@ -134,7 +136,8 @@ TEST(Test5, testGraph0NotDirected)
     //assert(map2string(Previous) == "[A:B][C:B]" && "Dijkstra(B) previous");
 
     // 5.2.3
-    tie(Weights, Previous) = G.dijkstra("X");
+    ansStr = "X";
+    tie(Weights, Previous) = G.dijkstra(ansStr);
     EXPECT_TRUE(map2string(Weights).empty()); // Dijkstra(C) weights
     //assert(map2string(Weights).empty() && "Dijkstra(C) weights");
     EXPECT_TRUE(map2string(Previous).empty()); // Dijkstra(C) previous
