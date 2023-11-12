@@ -86,7 +86,7 @@ TEST(Test4, Graph0Dijkstra)
 
 	// T1.2
 	tie(Weights, Previous) = G.dijkstra("B");
-	string ansStr = "[C:3]";
+	ansStr = "[C:3]";
 	EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(B) weights
 	// assert(map2string(Weights) == "[C:3]" && "Dijkstra(B) weights");
 	ansStr = "[C:B]";
