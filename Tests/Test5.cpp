@@ -115,7 +115,7 @@ TEST(Test5, testGraph0NotDirected)
     map<string, string> Previous;
     tie(Weights, Previous) = G.dijkstra("A");
     // cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
-    string ansStr = "[B:1][C:4]";
+    ansStr = "[B:1][C:4]";
     EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
     // assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
     //  cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
@@ -147,7 +147,7 @@ TEST(Test5, testGraph0NotDirected)
     EXPECT_TRUE(MstLength == 4); // mst A is 4
     //assert(MstLength == 4 && "mst A is 4");
     ansStr = "[AB 1][BC 3]";
-    EXPECT_EQ(Tester::getSs(), ansStr) // mst A is [AB 1][BC 3]
+    EXPECT_EQ(Tester::getSs(), ansStr); // mst A is [AB 1][BC 3]
     //assert(Tester::getSs() == "[AB 1][BC 3]" && "mst A is [AB 1][BC 3]");
 
     // 5.2.5
