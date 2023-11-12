@@ -151,7 +151,8 @@ jobs:
       run:  sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite -s --error-exitcode=3' --test_output=all //Tests:APP_test_5
+      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite -s --smc-check=all --error-exitcode=3' --test_output=all //Tests:APP_test_5
+      #smc-checl=all (support for nested functions) https://linux.die.net/man/1/valgrind 
       #Note to add /remove tests:
       # 1) make the job here Run_Test_#
       # 2) copy the content from one of the run tests (not build)
