@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Test4
 // Test Desc.  : testing Dijkstra on graph 0
-//				 	(coverage for old testGraph0BFS(). was #2 test method...)
+//				 	(coverage for old testGraph0Dijkstra(). was #4 test method...)
 // Author      : Jeffrey Caruso, Yusuf Pisan
 // Date    	   : Fall 2023
 //============================================================================
@@ -98,6 +98,6 @@ TEST(Test4, Graph0Dijkstra)
 
 	EXPECT_TRUE(map2string(Weights).empty()); // Dijkstra(C) weights
 	// assert(map2string(Weights).empty() && "Dijkstra(C) weights");
-	EXPECT_TRUE(map2string(Previous).empty()) // Dijkstra(C) previous
+	EXPECT_TRUE(map2string(Previous).empty()); // Dijkstra(C) previous
 	// assert(map2string(Previous).empty() && "Dijkstra(C) previous");
 }

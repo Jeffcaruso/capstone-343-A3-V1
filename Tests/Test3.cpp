@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Test3
 // Test Desc.  : testing Breadth First Search (BFS) on graph 0
-//				 	(coverage for old testGraph0BFS(). was #2 test method...)
+//				 	(coverage for old testGraph0BFS(). was #3 test method...)
 // Author      : Jeffrey Caruso, Yusuf Pisan
 // Date    	   : Fall 2023
 //============================================================================
