@@ -72,8 +72,8 @@ TEST(Test2, Graph0DFS)
 	EXPECT_TRUE(G.contains("A")); // a in graph
 	EXPECT_TRUE(G.contains("B")); // b in graph
 	EXPECT_TRUE(G.contains("C")); // c in graph
-	string ansStr = "B(1),C(8)"
-	EXPECT_EQ(G.getEdgesAsString("A"), ansStr)
+	string ansStr = "B(1),C(8)";
+	EXPECT_EQ(G.getEdgesAsString("A"), ansStr);
 	ansStr = "C(3)";
 	EXPECT_EQ(G.getEdgesAsString("B"), ansStr);
 	EXPECT_TRUE(G.getEdgesAsString("C").empty());
