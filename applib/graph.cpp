@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>  //maybe gtest?
-
 #include "graph.h"
 #include <algorithm>
 #include <cassert>
@@ -54,11 +52,14 @@ Graph::dijkstra(const string &StartLabel) const {
 int Graph::mst(const string &StartLabel,
                void Visit(const string &From, const string &To,
                           int Weight)) {
-  TEST(Test5, testMST)
+  // TEST(Test5, testMST)
+  // {
+  //   EXPECT_FALSE(DirectionalEdges);
+  // }
+  if(! DirectionalEdges)
   {
-    EXPECT_FALSE(DirectionalEdges);
+    return -100; // invalid case... Could then use this to do what is needed...
   }
-  
   //assert(!DirectionalEdges);
   return 0;
 }
