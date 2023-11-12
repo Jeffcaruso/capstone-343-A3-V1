@@ -51,7 +51,12 @@ Graph::dijkstra(const string &StartLabel) const {
  */
 int Graph::mst(const string &StartLabel,
                void Visit(const string &From, const string &To,
-                          int Weight)) const {
+                          int Weight)) {
   assert(!DirectionalEdges);
   return 0;
 }
+//maybe need to remove const at end of this
+//int Graph::mst(const string &StartLabel,
+//               void Visit(const string &From, const string &To,
+//                          int Weight)) const {
+// to w/o that last const...?
