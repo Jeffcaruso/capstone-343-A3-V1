@@ -143,7 +143,7 @@ TEST(Test5, testGraph0NotDirected)
     EXPECT_TRUE(map2string(Previous).empty()); // Dijkstra(C) previous
     //assert(map2string(Previous).empty() && "Dijkstra(C) previous");
 
-    // 5.2.4
+    // 5.2.4   !!! mst seems to be the cause of valgrund errors, but not too sure what I can do at this point...
     Tester::resetSs();
     ansStr = "A";
     int MstLength = G.mst(ansStr, Tester::edgeVisitor);
