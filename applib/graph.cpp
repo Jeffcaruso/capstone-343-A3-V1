@@ -11,34 +11,26 @@
 
 using namespace std;
 
-class Graph
-{
-	// retain DirectionalEdges for later...
-	Graph::Graph(bool directionalEdge)
-	{
-		DirectionalEdges = directionalEdge;
-	}
+Graph::Graph(bool directedEdges) { DirectionalEdges = directedEdges; }
 
-	Graph::~Graph()
-	{
-	}
+Graph::~Graph() {}
 
-	bool Graph::readFile(const string &Filename) { return true; }
+bool Graph::readFile(const string &Filename) { return true; }
 
-	int Graph::verticesSize() const { return 0; }
+int Graph::verticesSize() const { return 0; }
 
-	int Graph::edgesSize() const { return 0; }
+int Graph::edgesSize() const { return 0; }
 
-	int Graph::neighborsSize(const string &Label) const { return 0; }
+int Graph::neighborsSize(const string &Label) const { return 0; }
 
-	bool Graph::add(const string &Label) { return false; }
+bool Graph::add(const string &Label) { return false; }
 
-	/** return true if vertex already in graph */
-	bool Graph::contains(const std::string &Label) const { return false; }
+/** return true if vertex already in graph */
+bool Graph::contains(const std::string &Label) const { return false; }
 
-	string Graph::getEdgesAsString(const string &Label) const { return ""; }
+string Graph::getEdgesAsString(const string &Label) const { return ""; }
 
-	bool Graph::connect(const string &From, const string &To, int Weight)
+bool Graph::connect(const string &From, const string &To, int Weight)
 	{
 		return true;
 	}
@@ -87,4 +79,3 @@ class Graph
 	//  to w/o that last const...?
 
 	// maybe issue here is using assert and not Gtest...?
-}
