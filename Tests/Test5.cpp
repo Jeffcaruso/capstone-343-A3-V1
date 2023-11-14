@@ -146,7 +146,7 @@ TEST(Test5, testGraph0NotDirected)
     // 5.2.4   !!! mst seems to be the cause of valgrund errors, but not too sure what I can do at this point...
     Tester::resetSs();
     ansStr = "A";
-    int MstLength = G.mst(ansStr, *Tester::edgeVisitor);  //&ansstr?
+    int MstLength = G.mst(*ansStr, Tester::edgeVisitor);  //&ansstr?
     EXPECT_TRUE(MstLength == 4); // mst A is 4
     //assert(MstLength == 4 && "mst A is 4");
     ansStr = "[AB 1][BC 3]";
