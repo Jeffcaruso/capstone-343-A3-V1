@@ -11,28 +11,6 @@
 
 using namespace std;
 
-//Tester
-//maybe adding tester fixes it...?
-// class Tester
-// {
-// public:
-//     Tester() = delete;
-//     insert output to SS rather than cout, so we can test it
-//     static stringstream SS;
-//     static string getSs() { return SS.str(); }
-//     static void resetSs() { SS.str(string()); }
-//     visitor function used for DFS and BFS
-//     static void labelVisitor(const string &Label) { SS << Label; }
-//     visitor function used for edges for minimum spanning tree
-//     static void edgeVisitor(const string &From, const string &To, int Weight)
-//     {
-//         SS << "[" << From << To << " " << Weight << "]";
-//     }
-// };
-
-
-
-
 
 Graph::Graph(bool DirectionalEdges) {}
 
@@ -84,6 +62,7 @@ int Graph::mst(const string &StartLabel,
   // {
   //   EXPECT_FALSE(DirectionalEdges);
   // }
+  //accessing DirectionalEdges was the issue !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // if(! DirectionalEdges)
   // {
   //   return -100; // invalid case... Could then use this to do what is needed...
@@ -91,7 +70,7 @@ int Graph::mst(const string &StartLabel,
   //assert(!DirectionalEdges);
   return 0;
 }
-//maybe need to remove const at end of this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//maybe need to remove const at end of this !!!!!!!!!!!!!!!!!!!!!!!!!
 //int Graph::mst(const string &StartLabel,
 //               void Visit(const string &From, const string &To,
 //                          int Weight)) const {
