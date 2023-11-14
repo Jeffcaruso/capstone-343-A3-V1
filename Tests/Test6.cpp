@@ -101,7 +101,7 @@ TEST(Test5, testGraph1)
     Weights = P.first;
     Previous = P.second;
     //5.4.1
-    ansStr = "[B:1][C:2][D:3][E:4][F:5][G:4][H:3]"
+    ansStr = "[B:1][C:2][D:3][E:4][F:5][G:4][H:3]";
     EXPECT_EQ(ansStr, map2string(Weights)); // Dijkstra(B) weights
     //assert(map2string(Weights) == "[B:1][C:2][D:3][E:4][F:5][G:4][H:3]" && "Dijkstra(B) weights");
 
