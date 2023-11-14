@@ -4,6 +4,11 @@
 #include <map>
 #include <utility>
 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 //Tester
