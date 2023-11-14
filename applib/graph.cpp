@@ -11,6 +11,7 @@
 
 using namespace std;
 
+Graph:bool DirectionalEdges = false;
 
 Graph::Graph(bool DirectionalEdges) {}
 
