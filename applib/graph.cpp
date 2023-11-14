@@ -12,7 +12,7 @@
 using namespace std;
 
 
-Graph::Graph(bool DirectionalEdges) {}
+Graph::Graph(bool directedEdges) { DirectionalEdges = directedEdges; }
 
 Graph::~Graph() {}
 
