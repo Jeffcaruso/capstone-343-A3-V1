@@ -73,10 +73,10 @@ class Graph
 		//   EXPECT_FALSE(DirectionalEdges);
 		// }
 		// accessing DirectionalEdges was the issue !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// if(! DirectionalEdges)
-		// {
-		//   return -100; // invalid case... Could then use this to do what is needed...
-		// }
+		if (!DirectionalEdges)
+		{
+			return -100; // invalid case... Could then use this to do what is needed...
+		}
 		// assert(!DirectionalEdges);
 		return 0;
 	}
