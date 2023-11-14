@@ -84,10 +84,10 @@ int Graph::mst(const string &StartLabel,
   // {
   //   EXPECT_FALSE(DirectionalEdges);
   // }
-  if(! DirectionalEdges)
-  {
-    return -100; // invalid case... Could then use this to do what is needed...
-  }
+  // if(! DirectionalEdges)
+  // {
+  //   return -100; // invalid case... Could then use this to do what is needed...
+  // }
   //assert(!DirectionalEdges);
   return 0;
 }
