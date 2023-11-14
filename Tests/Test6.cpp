@@ -110,3 +110,4 @@ TEST(Test5, testGraph1)
     EXPECT_EQ(ansStr, map2string(Previous));
     //assert(map2string(Previous) == "[B:A][C:B][D:C][E:D][F:E][G:H][H:A]" && "Dijkstra(B) previous");
 }
+
