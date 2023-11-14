@@ -6,6 +6,29 @@
 
 using namespace std;
 
+//Tester
+//maybe adding tester fixes it...?
+class Tester
+{
+public:
+    Tester() = delete;
+    // insert output to SS rather than cout, so we can test it
+    static stringstream SS;
+    static string getSs() { return SS.str(); }
+    static void resetSs() { SS.str(string()); }
+    // visitor function used for DFS and BFS
+    static void labelVisitor(const string &Label) { SS << Label; }
+    // visitor function used for edges for minimum spanning tree
+    static void edgeVisitor(const string &From, const string &To, int Weight)
+    {
+        SS << "[" << From << To << " " << Weight << "]";
+    }
+};
+
+
+
+
+
 Graph::Graph(bool DirectionalEdges) {}
 
 Graph::~Graph() {}
