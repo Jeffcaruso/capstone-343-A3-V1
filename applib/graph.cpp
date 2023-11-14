@@ -13,8 +13,6 @@ using namespace std;
 
 class Graph
 {
-	bool DirectionalEdges;
-
 	// retain DirectionalEdges for later...
 	Graph::Graph(bool directionalEdge)
 	{
