@@ -67,10 +67,6 @@ TEST(Test3, Graph0BFS)
 	if (!G.readFile("graph0.txt"))
 		return;
 
-	/// ***
-	//// NEED TO CHECK IN ON USING BFS first time, then DFS the rest of the time...
-	/// ***
-
 	//A
 	Tester::resetSs();
 	string ansStr = "A";
@@ -97,5 +93,4 @@ TEST(Test3, Graph0BFS)
 	ansStr = "X";
 	G.dfs(ansStr, Tester::labelVisitor);
 	EXPECT_TRUE(Tester::getSs().empty()); // starting from X
-
 }

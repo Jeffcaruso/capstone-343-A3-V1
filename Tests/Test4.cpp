@@ -75,29 +75,21 @@ TEST(Test4, Graph0Dijkstra)
 
 	// T1.1
 	tie(Weights, Previous) = G.dijkstra("A");
-	// cout << "Dijkstra(A) weights is " << map2string(weights) << endl;
 	string ansStr = "[B:1][C:4]";
 	EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
-	// assert(map2string(Weights) == "[B:1][C:4]" && "Dijkstra(A) weights");
 	ansStr = "[B:A][C:B]";
 	EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(A) previous
-	// cout << "Dijkstra(A) previous is " << map2string(previous) << endl;
-	// assert(map2string(Previous) == "[B:A][C:B]" && "Dijkstra(A) previous");
 
 	// T1.2
 	tie(Weights, Previous) = G.dijkstra("B");
 	ansStr = "[C:3]";
 	EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(B) weights
-	// assert(map2string(Weights) == "[C:3]" && "Dijkstra(B) weights");
 	ansStr = "[C:B]";
 	EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(B) previous
-	// assert(map2string(Previous) == "[C:B]" && "Dijkstra(B) previous");
 
 	// T1.3
 	tie(Weights, Previous) = G.dijkstra("X");
 
 	EXPECT_TRUE(map2string(Weights).empty()); // Dijkstra(C) weights
-	// assert(map2string(Weights).empty() && "Dijkstra(C) weights");
 	EXPECT_TRUE(map2string(Previous).empty()); // Dijkstra(C) previous
-	// assert(map2string(Previous).empty() && "Dijkstra(C) previous");
 }

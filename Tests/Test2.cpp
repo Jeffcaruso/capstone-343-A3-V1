@@ -101,5 +101,4 @@ TEST(Test2, Graph0DFS)
 	G.dfs(ansStr, Tester::labelVisitor);
 	ansStr = "BC";
 	EXPECT_TRUE(Tester::getSs().empty()); // starting from X
-
 }

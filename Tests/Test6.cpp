@@ -1,7 +1,7 @@
 //============================================================================
-// Name        : Test5
-// Test Desc.  : testing undirected links on graph0
-//				 	(coverage for old testGraph0NotDirected(). was #5 test method...)
+// Name        : Test6
+// Test Desc.  : testing graph 1
+//				 	(coverage for old testGraph1(). was #6 test method...)
 // Author      : Jeffrey Caruso, Yusuf Pisan
 // Date    	   : Fall 2023
 //============================================================================
@@ -69,31 +69,29 @@ TEST(Test5, testGraph1)
     if (!G.readFile("graph1.txt"))
         return;
 
-    //5.1 - bfs
+    //5.1 - BFS A
     Tester::resetSs();
     string ansStr = "A";
     G.dfs(ansStr, Tester::labelVisitor);
     ansStr = "ABCDEFGH";
     EXPECT_EQ(ansStr, Tester::getSs()); // "dfs starting from A"
-    //assert(Tester::getSs() == "ABCDEFGH" && "dfs starting from A");
 
-    //5.2 - dfs
+    //5.2 - DFS B
     Tester::resetSs();
     ansStr = "B";
     G.dfs(ansStr, Tester::labelVisitor);
     ansStr = "BCDEFG";
     EXPECT_EQ(ansStr, Tester::getSs()); // dfs starting from B
-    //assert(Tester::getSs() == "BCDEFG" && "dfs starting from B");
 
-    //5.3 - bfs
+    //5.3 - BFS B
     Tester::resetSs();
     ansStr = "B";
     G.bfs(ansStr, Tester::labelVisitor);
     ansStr = "BCDEFG";
     EXPECT_EQ(ansStr, Tester::getSs()); // dfs starting from B
-    //assert(Tester::getSs() == "BCDEFG" && "dfs starting from B");
 
-    //5.4 - dijkstra
+
+    //5.4 - Dijkstra A
     map<string, int> Weights;
     map<string, string> Previous;
     ansStr = "A";
@@ -103,11 +101,8 @@ TEST(Test5, testGraph1)
     //5.4.1
     ansStr = "[B:1][C:2][D:3][E:4][F:5][G:4][H:3]";
     EXPECT_EQ(ansStr, map2string(Weights)); // Dijkstra(B) weights
-    //assert(map2string(Weights) == "[B:1][C:2][D:3][E:4][F:5][G:4][H:3]" && "Dijkstra(B) weights");
 
     //5.4.2
     ansStr = "[B:A][C:B][D:C][E:D][F:E][G:H][H:A]";
     EXPECT_EQ(ansStr, map2string(Previous));
-    //assert(map2string(Previous) == "[B:A][C:B][D:C][E:D][F:E][G:H][H:A]" && "Dijkstra(B) previous");
 }
-
