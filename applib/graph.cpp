@@ -69,6 +69,7 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 		{
 			return -100; // invalid case... Could then use this to do what is needed...
 		}
+		//situation fixed, can now access DirectionalEdges with this...
 		// assert(!DirectionalEdges);
 		return 0;
 	}
