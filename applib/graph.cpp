@@ -1,421 +1,476 @@
 #include "graph.h"
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <queue>
 #include <set>
 #include <stack>
-#include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
 using namespace std;
-typedef pair<int, pair<string, string>> labeledWeight;
 
 // constructor, empty graph
 // directionalEdges defaults to true
 Graph::Graph(bool directionalEdges) {
-  this->edgesCount = 0; // Counter for edges
-  // Determine if connections need to be made on both sides when inserting
-  this->directionalEdgeSwitch = directionalEdges;
+  source = nullptr;
+  isDirectional = directionalEdges;
+}
+
+// default constructor
+Graph::Graph() {
+  source = nullptr;
+  isDirectional = true;
 }
 
 // destructor
 Graph::~Graph() {
-  for (auto &vertex : this->verticies) {
-    delete vertex.second;
+  // Clean up all vertices
+  for (auto &entry : vmap) {
+    delete entry.second;
+  }
+
+  //  Clean up all edges
+  for (Edge *edge : edges) {
+    delete edge;
   }
 }
 
 // @return total number of vertices
-int Graph::verticesSize() const { return verticies.size(); }
+int Graph::verticesSize() const { return vmap.size(); }
 
 // @return total number of edges
-int Graph::edgesSize() const { return this->edgesCount; }
+int Graph::edgesSize() const { return edges.size(); }
 
 // @return number of edges from given vertex, -1 if vertex not found
 int Graph::vertexDegree(const string &label) const {
-  if (this->verticies.count(label) == 0) {
+  if (vmap.count(label) == 0) {
     return -1;
   }
-  return verticies.at(label)->getDegree();
+  std::map<string, Vertex *>::const_iterator it =
+      vmap.find(label); // access element of map this way to obey const
+  vector<Edge *> edges = it->second->neighbors;
+  return edges.size();
 }
 
 // @return true if vertex added, false if it already is in the graph
 bool Graph::add(const string &label) {
-  if (verticies.count(label) == 0) {
-    // Create a new vertex if the label hasn't been added to the graph already!
-    Vertex *temp = new Vertex(label);
-    verticies[label] = temp;
-    return true;
+  if (vmap.count(label) == 1) {
+    return false;
   }
-  // Vertex is found in the graph
-  return false;
+  vmap[label] = new Vertex(label); //(label);
+  return true;
 }
 
 /** return true if vertex already in graph */
 bool Graph::contains(const string &label) const {
-  return !(verticies.count(label) == 0);
+  for (auto element : vmap) {
+    if (element.first == label) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// helps compare when sorting
+static bool sorter(const std::pair<std::string, std::string> &left,
+                   const std::pair<std::string, std::string> &right) {
+  return left.first < right.first;
 }
 
 // @return string representing edges and weights, "" if vertex not found
 // A-3->B, A-5->C should return B(3),C(5)
 string Graph::getEdgesAsString(const string &label) const {
-  if (verticies.count(label) == 0) {
-    return "";
-  }
-  return verticies.at(label)->getEdgesString();
-}
+  vector<pair<string, string>> toSort;
+  string s;
+  std::map<string, Vertex *>::const_iterator it =
+      vmap.find(label); // access start Vertex from vmap this way to obey const
+  vector<Edge *> edges = it->second->neighbors;
+  if (isDirectional) {
 
-// Private helper function which returns a vector of all edges contained within
-// a vertex
-//  @return vector of all edges in given vertex
-vector<string> Graph::getEdgesAsVector(const string &label) const {
-  if (verticies.count(label) == 0) {
-    vector<string> empty;
-    return empty;
-  }
-  return verticies.at(label)->getEdgesVector();
-}
+    for (int i = 0; i < edges.size(); i++) {
+      pair<string, string> pair = make_pair(edges[i]->to->label + "(",
+                                            to_string(edges[i]->weight) + ")");
+      toSort.push_back(pair);
+      sort(toSort.begin(), toSort.end(), sorter);
+    }
 
-// Private helper function which returns a vector pair of all edges contained
-// within a vertex
-//  @return vector pair of all edges in given vertex
-vector<pair<string, int>>
-Graph::getWeightedEdgesVector(const string &label) const {
-  if (verticies.count(label) == 0) {
-    vector<pair<string, int>> empty;
-    return empty;
+    for (int i = 0; i < toSort.size(); i++) {
+      s += toSort[i].first;
+      if (i != toSort.size() - 1) {
+        toSort[i].second += ",";
+      }
+      s += toSort[i].second;
+    }
+    return s;
   }
-  return verticies.at(label)->getWeightedEdgesVector();
+
+  for (auto *element : edges) {
+    s += element->from->label + "-";
+    s += to_string(element->weight);
+    s += "->" + element->to->label + ", ";
+  }
+  return s;
 }
 
 // @return true if successfully connected
+// Add an edge between two vertices, create new vertices if necessary
+// A vertex cannot connect to itself, cannot have P->P
+// For digraphs (directed graphs), only one directed edge allowed, P->Q
+// Undirected graphs must have P->Q and Q->P with same weight
+// @return true if successfully connected
 bool Graph::connect(const string &from, const string &to, int weight) {
-  // Add vertexes if they don't already exist
-  this->add(to);
-  this->add(from);
-  // Check preconditions:
-  if (to == from || this->verticies[from]->connects(to) ||
-      (this->directionalEdgeSwitch && this->verticies[to]->connects(from))) {
-    /* Preconditions:
-     * 1. Validate that the string isn't trying to connect to itself!
-     * 2. If directional, validate that the other side doesn't already have a
-     * connection!
-     * 3. Validate that a connection doesn't already exist (works for both types
-     * of graph)
-     */
-    // cout << "1: " << to.compare(from) << endl;
-    // cout << boolalpha << "2: " << this->verticies[from]->connects(to) <<
-    // endl; cout << boolalpha << "3: " << (this->directionalEdgeSwitch &&
-    // this->verticies[to]->connects(from)) << endl;
-
-    return false; // A precondition failed!
+  if (from == to) {
+    return false;
   }
-  // Passes all checks, create a connection
-  this->verticies[from]->add(
-      to, weight); // Add the new connection along with its weight
-  this->edgesCount++;
-  if (!this->directionalEdgeSwitch) { // If non-directional add the connection
-                                      // to the other graph!
-    this->verticies[to]->add(from, weight);
-    // NOTE for grader:
-    //  It doesn't make sense to make the graph count for 2 when the vertecies
-    //  SHARE the same edge They are added as if they are one edge, and removed
-    //  as if they are one edge If you wanted to you could just add the
-    //  following line of code here to count up this->edgesCount++;
-  }
-  return true; // All preconditions have been passed!
-}
 
-// @return true if edge successfully deleted
-bool Graph::disconnect(const string &from, const string &to) {
-  if (verticies.count(from) != 0 &&
-      verticies[from]->connects(to)) { // Vertex exists, and has a connection
-    verticies[from]->remove(to); // Add the new connection along with its weight
-    this->edgesCount--;
-    if (!this->directionalEdgeSwitch) { // If non-directional remove the
-                                        // connection from the other graph!
-      this->verticies[to]->remove(from);
-      // NOTE for grader:
-      //  It doesn't make sense to make the graph count for 2 when the vertecies
-      //  SHARE the same edge They are added as if they are one edge, and
-      //  removed as if they are one edge If you wanted to you could just add
-      //  the following line of code here to count down this->edgesCount--;
+  if (isDirectional) {
+
+    if (isDupeEdge(from, to)) {
+      return false;
     }
+    Edge *from2to = new Edge(from, to, weight, this);
+
+    vmap[from]->neighbors.push_back(from2to);
+    edges.push_back(from2to);
     return true;
   }
-  return false; // One of the preconditions failed
+
+  if (isDupeEdge(to, from)) {
+    return false;
+  }
+  Edge *from2to = new Edge(from, to, weight, this);
+  // if vmap doesnt contain the vertexs already
+  vmap[from]->neighbors.push_back(from2to);
+  edges.push_back(from2to);
+
+  Edge *to2from = new Edge(to, from, weight, this);
+  vmap[to]->neighbors.push_back(to2from);
+  edges.push_back(to2from);
+
+  return true;
+}
+
+// checks if the edge alread exists
+bool Graph::isDupeEdge(string from, string to) {
+  if (vmap.count(from) == 0) {
+    return false;
+  }
+  for (Edge *element : vmap[from]->neighbors) {
+    if (to == element->to->label && from == element->from->label) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// checks if the edge already exists
+bool Graph::edgeExists(const string &from, const string &to) {
+  for (Edge *element : edges) {
+    if (to == element->to->label && from == element->from->label) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// returns the index of the edge
+int Graph::edgeIndex(const string &to) {
+  for (int i = 0; i < edges.size(); i++) {
+    if (edges[i]->to->label == to) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// returns the index of the edge in the provided vertex nieghbor list
+int Graph::edgeNeighborIndex(const string &from, const string &to) const {
+  for (int i = 0; i < get(from)->neighbors.size(); i++) {
+    // find index of desired edge in vmap[from]
+    if (get(from)->neighbors[i]->to->label == to) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// Disconnects two vertexs
+bool Graph::disconnect(const string &from, const string &to) {
+  if (isDirectional) {
+    // only one edge needs to go
+    if (edgeExists(from, to)) {
+      Edge *forwardEdge = vmap[from]->neighbors[edgeNeighborIndex(from, to)];
+      vector<Edge *>::iterator forwardEdgeIndexInNeighborList =
+          vmap[from]->neighbors.begin() + edgeNeighborIndex(from, to);
+      vector<Edge *>::iterator forwardEdgeIndexInBigEdgeList =
+          edges.begin() + edgeIndex(to);
+      edges.erase(forwardEdgeIndexInBigEdgeList);
+      vmap[from]->neighbors.erase(forwardEdgeIndexInNeighborList);
+      delete forwardEdge;
+      return true;
+    }
+    // edge doesn't exist
+    return false;
+  }
+  if (edgeExists(from, to) || edgeExists(to, from)) {
+
+    assert(edgeNeighborIndex(from, to) != -1);
+    assert(edgeNeighborIndex(to, from) != -1);
+
+    Edge *forwardEdge = vmap[from]->neighbors[edgeNeighborIndex(from, to)];
+    Edge *backwardEdge = vmap[to]->neighbors[edgeNeighborIndex(to, from)];
+
+    vector<Edge *>::iterator forwardEdgeIndexInNeighborList =
+        vmap[from]->neighbors.begin() + edgeNeighborIndex(from, to);
+    vector<Edge *>::iterator backwardEdgeIndexInNeighborList =
+        vmap[to]->neighbors.begin() + edgeNeighborIndex(to, from);
+    vector<Edge *>::iterator forwardEdgeIndexInBigEdgeList =
+        edges.begin() + edgeIndex(to);
+    vector<Edge *>::iterator backwardEdgeIndexInBigEdgeList =
+        edges.begin() + edgeIndex(from);
+
+    edges.erase(backwardEdgeIndexInBigEdgeList);
+    edges.erase(forwardEdgeIndexInBigEdgeList);
+    vmap[from]->neighbors.erase(forwardEdgeIndexInNeighborList);
+    vmap[to]->neighbors.erase(backwardEdgeIndexInNeighborList);
+    assert(edgeNeighborIndex(from, to) == -1);
+    assert(edgeNeighborIndex(to, from) == -1);
+
+    delete forwardEdge;
+    delete backwardEdge;
+    return true;
+  }
+  return false;
 }
 
 // depth-first traversal starting from given startLabel
 void Graph::dfs(const string &startLabel, void visit(const string &label)) {
-  string returnString;
-  if (this->verticies.count(startLabel) !=
-      0) { // Make sure that starting label exists!
-    stack<string> dfsStack;
-    set<string> visited;
-    dfsStack.push(startLabel);
-    while (!dfsStack.empty()) {
-      string current = dfsStack.top();
-      dfsStack.pop(); // Pop from the stack!
-      if (visited.count(current) == 0) {
-        visited.insert(current);
-        returnString += current;
-        vector<string> edges = this->getEdgesAsVector(current);
-        // for(int i = 0; i < edges.size(); i++) {
-        // Seems like we have to read the queue backwards to get expected input
-        for (int i = edges.size() - 1; i >= 0; i--) {
-          if (visited.count(edges.at(i)) == 0) { // Check if node already
-                                                 // visited
-            dfsStack.push(edges.at(i));
-          }
-        }
+  unordered_set<Vertex *> visited;
+  stack<Vertex *> stack;
+  if (get(startLabel) == nullptr) {
+    return;
+  }
+  stack.push(vmap[startLabel]);
+
+  while (!stack.empty()) {
+    stack = sortStack(stack);
+    Vertex *current = stack.top();
+    stack.pop();
+    if (current == nullptr) {
+      return;
+      assert(1 == 0);
+    }
+
+    if (visited.count(current) == 0) {
+      visit(current->label);
+      visited.insert(current);
+    }
+
+    for (Edge *neighbor : current->neighbors) {
+      if (visited.count(neighbor->to) == 0) {
+        stack.push(neighbor->to);
       }
-      // cout << current << " : " << dfsStack.size() << endl;
     }
   }
-  visit(returnString);
+}
+
+// sorts a stack
+stack<Graph::Vertex *> Graph::sortStack(std::stack<Vertex *> inputStack) {
+  std::stack<Vertex *> tempStack;
+
+  while (!inputStack.empty()) {
+    Vertex *temp = inputStack.top();
+    inputStack.pop();
+
+    while (!tempStack.empty() && tempStack.top()->label < temp->label) {
+      inputStack.push(tempStack.top());
+      tempStack.pop();
+    }
+
+    tempStack.push(temp);
+  }
+
+  return tempStack;
 }
 
 // breadth-first traversal starting from startLabel
 void Graph::bfs(const string &startLabel, void visit(const string &label)) {
-  string returnString;
-  if (this->verticies.count(startLabel) !=
-      0) { // Make sure that starting label exists!
-    queue<string> bfsQueue;
-    set<string> visited;
-    bfsQueue.push(startLabel);
-    while (!bfsQueue.empty()) {
-      string current = bfsQueue.front();
-      bfsQueue.pop(); // Pop from the queue!
-      if (visited.count(current) == 0) {
-        visited.insert(current);
-        returnString += current;
-        vector<string> edges = this->getEdgesAsVector(current);
-        for (int i = 0; i < edges.size(); i++) {
-          if (visited.count(edges.at(i)) == 0) { // Check if node already
-                                                 // visited
-            bfsQueue.push(edges.at(i));
-          }
-        }
+  unordered_set<Vertex *> visited;
+  queue<Vertex *> queue;
+  queue.push(vmap[startLabel]);
+  visited.insert(vmap[startLabel]);
+
+  while (!queue.empty()) {
+    Vertex *current = queue.front();
+    if (current == nullptr) {
+      return;
+      assert(1 == 0);
+    }
+    visit(current->label);
+    queue.pop();
+
+    vector<Edge *> tempV = current->neighbors;
+
+    std::sort(tempV.begin(), tempV.end(), [](const Edge *a, const Edge *b) {
+      return a->to->label > b->to->label;
+    });
+
+    for (int i = tempV.size() - 1; i >= 0; i--) {
+
+      if (visited.count(tempV[i]->to) == 0) {
+        visited.insert(tempV[i]->to);
+        queue.push(tempV[i]->to);
       }
-      // cout << current << " : " << bfsQueue.size() << endl;
     }
   }
-  visit(returnString);
+}
+
+// gets the vertex that matches input
+Graph::Vertex *Graph::get(string input) const {
+  for (auto element : vmap) {
+    if (element.first == input) {
+      return element.second;
+    }
+  }
+  return nullptr;
 }
 
 // store the weights in a map
 // store the previous label in a map
 pair<map<string, int>, map<string, string>>
 Graph::dijkstra(const string &startLabel) const {
+  priority_queue<pair<int, Vertex *>, vector<pair<int, Vertex *>>,
+                 greater<pair<int, Vertex *>>>
+      pq;
   map<string, int> weights;
-  map<string, string> previous;
-  // Makeshift priority queue sorted by lowest weight value
-  set<string> toVisit;
-  // Validate that verticies contains the start label!
-  if (this->verticies.count(startLabel) != 0) {
-    for (const auto &crawler : this->verticies) {
-      weights[crawler.first] = INT16_MAX;
-      previous[crawler.first] = "";
-      toVisit.insert(crawler.first);
-    }
+  map<string, string> edges;
+  if (get(startLabel) == nullptr) {
+    return make_pair(weights, edges);
   }
-  // For each element in the graph, set weight to INT_MAX
-  // For each element in the graph, set previous to ""
-  // For each element in the graph, add it to toVisit set with given weights
+  pq.push({0, get(startLabel)});
 
-  // Make weight of initial label 0
-  weights[startLabel] = 0;
+  map<Vertex *, int> dist;
 
-  while (!toVisit.empty()) { // While value in toVisit
-    // Find vertex X with minimum weight value (that's not INT_MAX)
-    string lowestKey;
-    int minWeight = INT16_MAX;
-    for (set<string>::iterator itr = toVisit.begin(); itr != toVisit.end();
-         itr++) {
-      if (weights.at(*itr) <= minWeight) { // weights.at(*itr) != INT16_MAX &&
-        minWeight = weights.at(*itr);
-        lowestKey = *itr;
+  for (auto v : vmap) {
+    dist[v.second] = numeric_limits<int>::max();
+  }
+  dist[get(startLabel)] = 0;
+
+  map<Vertex *, bool> visited;
+
+  int totalDist = 0;
+  while (!pq.empty()) {
+    // auto [d, u] = pq.top();
+    auto d = pq.top().first;
+    auto *u = pq.top().second;
+    pq.pop();
+    totalDist = d;
+    if (visited[u]) {
+      continue;
+    }
+    visited[u] = true;
+
+    for (auto &e : u->neighbors) {
+      auto *v = e->to;
+      auto w = e->weight;
+      if (dist[u] + w < dist[v]) {
+        dist[v] = dist[u] + w;
+        pq.push({dist[v], v});
+        weights[v->label] = w + totalDist;
+        edges[v->label] = e->from->label;
       }
     }
-    // Remove that value from the toVisit
-    toVisit.erase(lowestKey);
-    // Only iterate through neighbors if lowest value is a non-inf number
-    if (minWeight < INT16_MAX) {
-      // For each neighbor I of lowestKey that is in toVisit
-      vector<pair<string, int>> neighbors =
-          this->getWeightedEdgesVector(lowestKey);
-      for (int i = 0; i < neighbors.size(); i++) {
-        int pathWeight = weights[lowestKey] + neighbors.at(i).second;
-        // Determine if pathweight is lower than its curernt path for neighbor
-        if (pathWeight < weights[neighbors.at(i).first]) {
-          weights[neighbors.at(i).first] = pathWeight;
-          previous[neighbors.at(i).first] = lowestKey;
-        }
-      }
-    }
-    // If we find weights without a partner
-    if (minWeight == INT16_MAX) {
-      weights.erase(lowestKey);
-      previous.erase(lowestKey);
-    }
   }
-  // Remove the starting label from the return value
-  weights.erase(startLabel);
-  previous.erase(startLabel);
-  return make_pair(weights, previous);
+
+  return make_pair(weights, edges);
 }
 
 // minimum spanning tree using Prim's algorithm
 int Graph::mstPrim(const string &startLabel,
                    void visit(const string &from, const string &to,
                               int weight)) const {
-  if (this->directionalEdgeSwitch || this->verticies.count(startLabel) == 0) {
-    // Graph is directional OR starting label is not contained within the graph
+  if (get(startLabel) == nullptr) {
     return -1;
   }
-  int totalCost = 0;
-  int edgeCounter = 0;
+  vector<Edge *> mst;
+  int vectorsVisited = 1;
+  vector<Edge *> adj;
   set<string> visited;
-  priority_queue<labeledWeight, vector<labeledWeight>, greater<labeledWeight>>
-      edges;
-  // Add startLabel to visited
+  adj = get(startLabel)->neighbors;
   visited.insert(startLabel);
-  // Add all edges from startLabel to the priority queue
-  vector<pair<string, int>> startingEdges =
-      this->getWeightedEdgesVector(startLabel);
-  for (int i = 0; i < startingEdges.size(); i++) {
-    pair<string, string> temp =
-        make_pair(startLabel, startingEdges.at(i).first);
-    edges.push(make_pair(startingEdges.at(i).second, temp));
+  while (vmap.size() != vectorsVisited) { // until every vertex is visited
+    auto *min = getMinEdge(adj);
+    mst.push_back(min);
+    visited.insert(min->to->label);
+    vectorsVisited++;
+    adj = adjToMst(mst, visited);
   }
-  while (!edges.empty()) {
-    pair<int, pair<string, string>> nextEdge = edges.top();
-    edges.pop();
-    string edgeTo = nextEdge.second.second;
-    string edgeFrom = nextEdge.second.first;
-    int edgeWeight = nextEdge.first;
-    // Only add edges if node isn't visited yet
-    if (visited.count(edgeTo) == 0) {
-      // Mark this edge as visited!
-      visited.insert(edgeTo);
-      edgeCounter++;
-      totalCost += edgeWeight;
-      visit(edgeFrom, edgeTo, edgeWeight);
-      // Add all new edges
-      vector<pair<string, int>> newEdges = this->getWeightedEdgesVector(edgeTo);
-      for (int j = 0; j < newEdges.size(); j++) {
-        // Only add if the other side of the connection has not been visited!
-        if (visited.count(newEdges.at(j).first) == 0) {
-          pair<string, string> tempNew =
-              make_pair(edgeTo, newEdges.at(j).first);
-          edges.push(make_pair(newEdges.at(j).second, tempNew));
-        }
-      }
-    }
+
+  int minPath = 0;
+  for (Edge *element : mst) {
+    string from = element->from->label;
+    string to = element->to->label;
+    int weight = element->weight;
+    visit(from, to, weight);
+    minPath += element->weight;
   }
-  // NOTE FOR GRADER:
-  // Validate that edges have been found
-  // It appears that we are attempting to find partial mst
-  // To validate our prim search, check if edges = vertexes - 1
-  // Uncomment the following code if requested, I thought it wasn't needed:
-
-  // if (edgesCount != this->verticesSize() - 1) {
-  //   return -1;
-  // }
-
-  return totalCost;
+  return minPath;
 }
 
-// minimum spanning tree using Kruskal's algorithm
-int Graph::mstKruskal(void visit(const string &from, const string &to,
-                                 int weight)) const {
-  map<string, int *> token;
-  int tokenCounter = 0;
-  int edgeTotal = 0;
-  vector<int *> tokenHolder;
-  set<string> unvisited;
-  priority_queue<labeledWeight, vector<labeledWeight>, greater<labeledWeight>>
-      edges;
-
-  for (const auto &vertex : this->verticies) {
-    // Add to set
-    unvisited.insert(vertex.first);
-    // Token Counter 1 2 3...
-    int *temp = new int;
-    *temp = ++tokenCounter;
-    tokenHolder.push_back(temp);
-    token[vertex.first] = temp;
-
-    // Add edges
-    vector<pair<string, int>> startingEdges =
-        this->getWeightedEdgesVector(vertex.first);
-    for (int i = 0; i < startingEdges.size(); i++) {
-      pair<string, string> temp =
-          make_pair(vertex.first, startingEdges.at(i).first);
-      edges.push(make_pair(startingEdges.at(i).second, temp));
+// checks if the edge is in the vector
+bool Graph::isEdgeInVector(const Edge *edgeToFind,
+                           const std::vector<Edge *> &edgeVector) {
+  for (const Edge *edge : edgeVector) {
+    if (edge == edgeToFind) {
+      return true;
     }
   }
+  return false;
+}
 
-  // While there are unvisited verticies and edges to be looked at
-  // Looking for smallest edge, make sure token #'s are different
-  // while (!edges.empty() && !unvisited.empty()) {
-  while (!edges.empty()) {
-    labeledWeight lowestEdge = edges.top();
-    edges.pop();
-    // Make sure that the token value of the graphs are different!
-    // Case 1 left side
-    if (*token[lowestEdge.second.first] > *token[lowestEdge.second.second]) {
-      // delete token[lowestEdge.second.first];
-      int updatedValue = *token[lowestEdge.second.first];
-      for (auto &tokenInstance : token) {
-        if (*tokenInstance.second == updatedValue) {
-          tokenInstance.second = token[lowestEdge.second.second];
-        }
+// returns a list of the Edges adjacent to the mst
+vector<Graph::Edge *> Graph::adjToMst(vector<Edge *> mst,
+                                      set<string> visited) const {
+  vector<Edge *> adj;
+  for (string element : visited) {
+    for (Edge *edge : get(element)->neighbors) {
+      if (visited.count(edge->to->label) == 0) {
+        adj.push_back(edge);
       }
-      token[lowestEdge.second.first] = token[lowestEdge.second.second];
-      unvisited.erase(lowestEdge.second.first);
-      unvisited.erase(lowestEdge.second.second);
-      edgeTotal += lowestEdge.first;
-      visit(lowestEdge.second.first, lowestEdge.second.second,
-            lowestEdge.first);
-    }
-    // Case 2 right side
-    if (*token[lowestEdge.second.first] < *token[lowestEdge.second.second]) {
-      // delete token[lowestEdge.second.second];
-      int updatedValue = *token[lowestEdge.second.second];
-      for (auto &tokenInstance : token) {
-        if (*tokenInstance.second == updatedValue) {
-          tokenInstance.second = token[lowestEdge.second.first];
-        }
-      }
-      token[lowestEdge.second.second] = token[lowestEdge.second.first];
-      unvisited.erase(lowestEdge.second.first);
-      unvisited.erase(lowestEdge.second.second);
-      edgeTotal += lowestEdge.first;
-      visit(lowestEdge.second.first, lowestEdge.second.second,
-            lowestEdge.first);
     }
   }
 
-  // When assigning a new edge, take the lowest token # and add to all
-  // other values with that token value Vector of Pointers which reprepesent all
-  // vertexes When a value of the tree changes, make it point to that new value
-
-  // loop through and delete all pointers from the vector when done
-  for (int i = 0; i < tokenHolder.size(); i++) {
-    delete tokenHolder.at(i);
+  for (int i = 0; i < adj.size(); i++) {
+    if (isEdgeInVector(adj[1], mst)) {
+      adj.erase(adj.begin() + i);
+    }
   }
-  return edgeTotal;
+  return adj;
+}
+
+// returns the minimum edge adjacent to mst
+Graph::Edge *Graph::getMinEdge(vector<Edge *> adjToMst) {
+  int min = numeric_limits<int>::max();
+  Edge *minKey;
+  for (Edge *element : adjToMst) {
+    if (element->weight < min) {
+      min = element->weight;
+      minKey = element;
+    }
+  }
+  return minKey;
 }
 
 // read a text file and create the graph
 bool Graph::readFile(const string &filename) {
   ifstream myfile(filename);
+  // if (isDirectional == false)
   if (!myfile.is_open()) {
     cerr << "Failed to open " << filename << endl;
     return false;
