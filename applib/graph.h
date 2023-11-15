@@ -8,6 +8,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "vertex.h"
 #include <map>
 #include <set>
 #include <string>
@@ -17,6 +18,17 @@ using namespace std;
 
 class Graph {
 private:
+  bool directionalEdgeSwitch; //Determines if the graph should leverage directional edges, defaults to true
+  map<string,Vertex*> verticies; //The vertexes contained within the graph, accessed by label.
+  int edgesCount; //The number of edges within the graph
+
+  //Private helper function which returns a vector of all edges contained within a vertex
+  // @return vector of all edges in given vertex
+  vector<string> getEdgesAsVector(const string &label) const;
+
+  //Private helper function which returns a vector pair of all edges contained within a vertex
+  // @return vector pair of all edges in given vertex
+  vector<pair<string,int>> getWeightedEdgesVector (const string &label) const;
 public:
   // constructor, empty graph
   explicit Graph(bool directionalEdges = true);
@@ -102,49 +114,6 @@ public:
   // @return length of the minimum spanning tree or -1 if start vertex not
   int mstKruskal(void visit(const string &from, const string &to,
                             int weight)) const;
-
-  
-
-  //Master map holding within every vertex and connections
-  //First string is for easy identifying
-  //Second map: string is connecting other vertex and int is distance
-  map<string, map<string, int*>> allVertexes;
-
-  //Keep tracks of directional edge
-  bool directionalEdgeCheck;
-
 };
 
 #endif // GRAPH_H
-
-  //Other:
-
-    //Key value pairs, first element is our vertex
-    //second value map is paired and connected to our set of edges
-    //int is our measured distance
-    //map<string, map<string, int>> edge;
-
-  //Keep tracks of edges, connections
-  //struct edge{
-  //  vertex* from;
-  //  vertex* to;
-  //  int distance;
-  //};
-
-    //Keep tracks of vertex, nodes
-  //Each vertex carries a value and has connections to
-  //Other vertexes with corresponding distances
-  //struct vertex{
-    //Storing this vertex's value, "from value"
-    //string vertexVal;
-
-    //Map pairs
-    //First value is vertex with all connected "to values"
-    //second value is the distance between each other
-    //map<struct vertex*, int> mapEdges;
-
-    //};
-
-  //Master map holding within every vertex and connections
-  //String is for easy identifying
-  //map<string, vertex*> allVertexes;
