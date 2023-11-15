@@ -9,9 +9,8 @@
 #define GRAPH_H
 
 #include <map>
+#include <set>
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -26,7 +25,6 @@ public:
 
   // move not allowed
   Graph(Graph &&other) = delete;
-
   // assignment not allowed
   Graph &operator=(const Graph &other) = delete;
 
@@ -103,33 +101,27 @@ public:
   int mstKruskal(void visit(const string &from, const string &to,
                             int weight)) const;
 
-private:
-  // represents an edge with a start vertex, end vertex, and weight
-  struct Edge {
-    // full constructor
-    Edge(string start, string end, int weight) : start(start), end(end), weight(weight) {}
+  const std::unordered_map<std::string, std::unordered_map<std::string, int>>& getVertices() const;
 
-    string start;
-    string end;
-    int weight;
+  private:
 
-    // checks for equality between two edges
-    bool operator==(const Edge& other) const {
-        return start == other.start && end == other.end && weight == other.weight;
-    }
-    // checks if this weight is less than the other weight
-    bool operator<(const Edge& other) const {
-        return weight < other.weight;
-    }
-    // checks if this weight is grater than the other weight
-    bool operator>(const Edge& other) const {
-        return weight > other.weight;
-    }
-  };
+    bool isDirectional;
+    mutable std::unordered_map<string, unordered_map<string, int>> vertices;
+    mutable std::unordered_map<string, string> parent;
+    mutable std::unordered_map<string, int> rank;
 
-  unordered_map<string, vector<Edge>> edgeMap;
-  unordered_set<string> vertices;
-  bool directional;
+    void dfsHelper(const std::string &vertex, std::set<std::string> &visited, void (*func)(const std::string &));
+
+    string findSet(const string &vertex) const;
+
+    bool unionSets(const string &u, const string &v) const;
+    vector<pair<int, pair<int, int>>> getAllEdges() const;
+    string findSet(const string &v, unordered_map<string, string> &parents) const {
+    if (v != parents[v]) {
+        parents[v] = findSet(parents[v], parents);
+    }
+    return parents[v];
+}
 };
 
 #endif // GRAPH_H
