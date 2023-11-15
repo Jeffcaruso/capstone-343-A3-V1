@@ -16,6 +16,43 @@
 using namespace std;
 
 class Graph {
+private:
+
+  bool directional;
+
+  //list object representing an edge between two connected vertices
+  
+
+  struct Vertex{
+    
+    struct Edge {
+
+    Vertex *fromVert {nullptr};
+    Vertex *toVert {nullptr};
+
+    int weight {0};
+
+    struct Edge *next {nullptr};
+    };
+
+    string label;
+
+    bool visited {false}; //there is definitely a better way to do this
+
+    Edge *next {nullptr};
+  };
+
+  //friend void dfsRecursive(void visit(const string &label), const string &label, stack<Vertex*> &s);
+
+  //points to all existing Vertex objects
+  vector<Vertex*> verts;
+
+  int numV;
+
+  void deleteEdges(Vertex::Edge* cur);
+
+  
+  
 public:
   // constructor, empty graph
   explicit Graph(bool directionalEdges = true);
@@ -25,6 +62,7 @@ public:
 
   // move not allowed
   Graph(Graph &&other) = delete;
+
   // assignment not allowed
   Graph &operator=(const Graph &other) = delete;
 
@@ -100,28 +138,6 @@ public:
   // @return length of the minimum spanning tree or -1 if start vertex not
   int mstKruskal(void visit(const string &from, const string &to,
                             int weight)) const;
-
-  const std::unordered_map<std::string, std::unordered_map<std::string, int>>& getVertices() const;
-
-  private:
-
-    bool isDirectional;
-    mutable std::unordered_map<string, unordered_map<string, int>> vertices;
-    mutable std::unordered_map<string, string> parent;
-    mutable std::unordered_map<string, int> rank;
-
-    void dfsHelper(const std::string &vertex, std::set<std::string> &visited, void (*func)(const std::string &));
-
-    string findSet(const string &vertex) const;
-
-    bool unionSets(const string &u, const string &v) const;
-    vector<pair<int, pair<int, int>>> getAllEdges() const;
-    string findSet(const string &v, unordered_map<string, string> &parents) const {
-    if (v != parents[v]) {
-        parents[v] = findSet(parents[v], parents);
-    }
-    return parents[v];
-}
 };
 
 #endif // GRAPH_H

@@ -6,345 +6,514 @@
 #include <map>
 #include <queue>
 #include <set>
+#include <sstream>
+#include <stack>
 #include <utility>
 #include <vector>
 
 using namespace std;
 
 // constructor, empty graph
-Graph::Graph(bool directional) : isDirectional(directional) {}
-
-/** destructor, delete all vertices and edges */
-Graph::~Graph() {}
-
-// @return true if vertex added, false if it already is in the graph
-bool Graph::add(const std::string &label) {
-    if (vertices.find(label) != vertices.end()) {
-        return false; 
-    }
-    vertices[label] = {};
-    return true;
+// directionalEdges defaults to true
+Graph::Graph(bool directionalEdges) {
+  directional = directionalEdges;
+  verts.clear();
+  numV = 0;
 }
 
-// Add an edge between two vertices, create new vertices if necessary
-  // A vertex cannot connect to itself, cannot have P->P
-  // For digraphs (directed graphs), only one directed edge allowed, P->Q
-  // Undirected graphs must have P->Q and Q->P with same weight
-  // @return true if successfully connected
-bool Graph::connect(const std::string &from, const std::string &to, int weight) {
-    // Check for self-connection and return false if detected
-    if (from == to) {
-        return false;
-    }
+// destructor
+Graph::~Graph() {
+  for (auto *v : verts) {
+    deleteEdges(v->next);
+    delete v;
+  }
+  verts.clear();
+}
 
-    if (vertices.find(from) == vertices.end()) {
-        vertices[from] = std::unordered_map<std::string, int>();
-    }
-    if (vertices.find(to) == vertices.end()) {
-        vertices[to] = std::unordered_map<std::string, int>();
-    }
-
-    if (vertices[from].find(to) != vertices[from].end()) {
-        return false; 
-    }
-
-    vertices[from][to] = weight;
-    if (!isDirectional) {
-        vertices[to][from] = weight;
-    }
-    return true;
+void Graph::deleteEdges(Vertex::Edge *cur) {
+  if (cur != nullptr) {
+    deleteEdges(cur->next);
+    delete cur;
+  }
 }
 
 // @return total number of vertices
-int Graph::verticesSize() const {
-    return vertices.size();
+int Graph::verticesSize() const { 
+  cout << "number of vertices: " << numV << endl;
+  return numV; 
 }
 
 // @return total number of edges
-int Graph::edgesSize() const {
-    int size = 0;
-    for (const auto &vertex : vertices) {
-        size += vertex.second.size();
+int Graph::edgesSize() const { 
+  int edges {0};
+  Vertex::Edge *cur;
+  for (auto *v : verts) {
+    cur = v->next;
+    while (cur != nullptr) {
+      edges++;
+      cur = cur->next;
     }
-    if (!isDirectional) {
-        size /= 2; 
-    }
-    return size;
+  }
+  cout << "number of edges: " << edges << endl;
+  return edges; 
 }
 
 // @return number of edges from given vertex, -1 if vertex not found
-int Graph::vertexDegree(const std::string &label) const {
-    auto it = vertices.find(label);
-    if (it == vertices.end()) {
-        return -1; 
+int Graph::vertexDegree(const string &label) const { 
+  for (auto *v : verts) {
+    if (v->label == label) {
+      int edges {0};
+      Vertex::Edge *cur = v->next;
+      while (cur !=nullptr) {
+        edges++;
+        cur = cur->next;
+      }
+      return edges;
     }
-    return it->second.size();
+  }
+  return -1; 
 }
 
-// @return true if vertex is in the graph
-bool Graph::contains(const std::string &label) const {
-    return vertices.find(label) != vertices.end();
+// @return true if vertex added, false if it already is in the graph
+bool Graph::add(const string &label) { 
+  if (contains(label)) {
+    return false;
+  }
+  Vertex *add = new Vertex;
+  add->label = label;
+  verts.push_back(add);
+  numV++;
+  
+
+  std::cout << "current list of vertices: ";
+  for (auto *v :verts) {
+    std::cout << v->label << " ";
+  }
+  std::cout << endl << "numV= " << numV << endl;
+
+  return true; 
 }
 
-std::string Graph::getEdgesAsString(const std::string &label) const {
-    auto it = vertices.find(label);
-    if (it == vertices.end()) {
-        return ""; 
+/** return true if vertex already in graph */
+bool Graph::contains(const string &label) const { 
+  for (auto *v : verts) {
+    if (v->label == label) {
+      return true;
     }
-
-    // Convert the edges (adjacent vertices) of the found vertex into a vector
-    std::vector<std::pair<std::string, int>> edges(it->second.begin(), it->second.end());
-
-    // Sort the edges lexicographically by vertex label for consistent output
-    std::sort(edges.begin(), edges.end(), [](const std::pair<std::string, int> &a, const std::pair<std::string, int> &b) {
-        return a.first < b.first;
-    });
-
-    std::string result;
-
-    for (const auto &edge : edges) {
-        // Append the vertex label and its associated weight to the result string
-        result += edge.first + "(" + std::to_string(edge.second) + "),";
-    }
-
-    // Remove the trailing comma
-    if (!result.empty()) {
-        result.pop_back(); 
-    }
-
-    return result;
+  }
+  return false; 
 }
 
-// Remove edge from graph
-  // @return true if edge successfully deleted
-bool Graph::disconnect(const std::string &from, const std::string &to) {
-    if (vertices[from].erase(to) > 0) {
-        if (!isDirectional) {
-            vertices[to].erase(from);
+// @return string representing edges and weights, "" if vertex not found
+// A-3->B, A-5->C should return B(3),C(5)
+string Graph::getEdgesAsString(const string &label) const { 
+  for (auto *v : verts) {
+    if (v->label == label) {
+      Vertex::Edge *cur = v->next;
+      stringstream ss;
+      while (cur !=nullptr) {
+        ss << cur->toVert->label << "(" << cur->weight << ")";
+        if (cur->next != nullptr) {
+          ss << ",";
+        }
+        cur = cur->next;
+      }
+      cout << ss.str() << endl;
+      return ss.str();
+    }
+  }
+  return ""; 
+}
+
+// @return true if successfully connected
+bool Graph::connect(const string &from, const string &to, int weight) {
+  if (!contains(from)) {
+    add(from);
+  }
+  if (!contains(to)) {
+    add(to);
+  }
+  if (from == to) {
+    return false;
+  }
+
+  Vertex *connectTo;
+  for (auto *v : verts) {
+    if (v-> label == to) {
+      connectTo = v;
+    }
+  }
+
+  for (auto *v : verts) {
+    if (v->label == from) {
+      if (v->next == nullptr) {
+        v->next = new Vertex::Edge;
+        v->next->toVert = connectTo;
+        v->next->weight = weight;
+        cout << "connected " << v->label << " and " << v->next->toVert->label << " with weight: " << v->next->weight << endl;
+        
+        if (!directional) {
+          cout << "graph is not directional; making reverse connection" << endl;
+          connect(to, from, weight);
         }
         return true;
+      }
+      if (v->next != nullptr && v->next->toVert->label.compare(to) > 0) {
+        Vertex::Edge *insert = new Vertex::Edge;
+        insert->toVert = connectTo;
+        insert->weight = weight;
+        insert->next = v->next;
+        v->next = insert;
+        cout << "connected " << v->label << " and " << v->next->toVert->label << " with weight: " << v->next->weight << endl;
+        //cout << "inserted " << to << " before " << cur->next->next->toVert->label << endl;
+        if (!directional) {
+          cout << "graph is not directional; making reverse connection" << endl;
+         connect(to, from, weight);
+        }
+        return true;
+      }
+
+      Vertex::Edge *cur = v->next;
+      while (cur != nullptr) {
+        //cout << "traversing: found edge between " << v->label << " and " << cur->toVert->label << endl;
+        if (cur->toVert == connectTo) {
+          std::cout << from << " is already connected to " << to << endl;
+          return false;
+        }
+        if (cur->next != nullptr && cur->next->toVert->label.compare(to) > 0) {
+          Vertex::Edge *insert = new Vertex::Edge;
+          insert->toVert = connectTo;
+          insert->weight = weight;
+          insert->next = cur->next;
+          cur->next = insert;
+          cout << "connected " << v->label << " and " << cur->next->toVert->label << " with weight: " << cur->next->weight << endl;
+          //cout << "inserted " << to << " before " << cur->next->next->toVert->label << endl;
+          if (!directional) {
+            cout << "graph is not directional; making reverse connection" << endl;
+            connect(to, from, weight);
+          }
+          return true;
+        }
+        if (cur->next == nullptr) {
+          cur->next = new Vertex::Edge;
+          cur->next->toVert = connectTo;
+          cur->next->weight = weight;
+          cout << "connected " << v->label << " and " << cur->next->toVert->label << " with weight: " << cur->next->weight << endl;
+          if (!directional) {
+          cout << "graph is not directional; making reverse connection" << endl;
+          connect(to, from, weight);
+          }
+          return true;
+        }
+        cur = cur->next;
+      }
     }
+  }
+  
+  
+  return false;
+}
+
+bool Graph::disconnect(const string &from, const string &to) { 
+  if (!contains(from) || !contains(to)) {
     return false;
+  }
+  for (auto *v : verts) {
+    if (v->label == from) {
+      Vertex::Edge *cur = v->next;
+      Vertex::Edge *prev;
+      while (cur != nullptr) {
+        if (cur->toVert->label == to) {
+          //if it's the first and only edge from vertex v, just delete edge
+          if (v->next == cur && cur->next == nullptr) {
+            delete cur;
+            if (!directional) {
+              disconnect(to, from);
+            }
+            return true;
+          }
+          if (v->next != cur && cur->next != nullptr ) {
+            prev->next = cur->next;
+            delete cur;
+            if (!directional) {
+              disconnect(to, from);
+            }
+            return true;
+          }
+        }
+        else {
+          prev = cur;
+          cur = cur->next;
+        }
+      }
+      std::cout << "there is no edge connecting " << from << " and " << to << endl;
+      return false;
+    }
+  }
+  return false; 
 }
 
 // depth-first traversal starting from given startLabel
-void Graph::dfs(const std::string &start, void (*func)(const std::string &)) {
-    if (vertices.find(start) == vertices.end()) {
-        return;  
+void Graph::dfs(const string &startLabel, void visit(const string &label)) {
+  if (!contains(startLabel)) {
+    std::cout << "Does not contain " << startLabel << endl;
+    return;
+  }
+  stack<Vertex*> s;
+  Vertex::Edge *cur;
+  for (auto *v : verts) {
+    if (v->label == startLabel) {
+      s.push(v);
+      visit(s.top()->label);
+      v->visited = true;
     }
-    std::set<std::string> visited;
-    dfsHelper(start, visited, func);
-}
-
-void Graph::dfsHelper(const std::string &vertex, std::set<std::string> &visited, void (*func)(const std::string &)) {
-    if (vertices.find(vertex) == vertices.end()) {
-        return;
+  }
+  while (!s.empty()) {
+    cur = s.top()->next;
+    while (cur != nullptr) {
+      if (!cur->toVert->visited) { 
+        break;
+      }
+      cur = cur->next;
     }
-    
-    if (visited.find(vertex) == visited.end()) {
-        visited.insert(vertex);
-        func(vertex);
-        
-        std::vector<std::string> sortedNeighbors;
-        for (const auto &neighbour : vertices[vertex]) {
-            sortedNeighbors.push_back(neighbour.first);
-        }
-        std::sort(sortedNeighbors.begin(), sortedNeighbors.end());
-        
-        for (const std::string &neighbour : sortedNeighbors) {
-            dfsHelper(neighbour, visited, func);
-        }
+    if(cur == nullptr) {
+      
+      s.pop();
     }
+    else {
+      s.push(cur->toVert);
+      visit(s.top()->label);
+      s.top()->visited = true;
+    }
+  }
+  //reset visited fields to false. there is definitely a better way to do this.
+  for (auto *v : verts) {
+    v->visited = false;
+  }
 }
 
 // breadth-first traversal starting from startLabel
-// call the function visit on each vertex label */
-void Graph::bfs(const std::string &start, void (*func)(const std::string &)) {
-    if (vertices.find(start) == vertices.end()) { 
-        return;
+void Graph::bfs(const string &startLabel, void visit(const string &label)) {
+  if (!contains(startLabel)) {
+    std::cout << "Does not contain " << startLabel << endl;
+    return;
+  }
+
+  queue<Vertex*> vq;
+  Vertex::Edge *cur;
+  for (auto *v : verts) {
+    if (v->label == startLabel) {
+      vq.push(v);
+      v->visited = true;
     }
+  }
+  while (!vq.empty()) {
+    //visit then dequeue
+    visit(vq.front()->label);
+    cur = vq.front()->next;
+    vq.pop();
 
-    std::set<std::string> visited;
-    std::queue<std::string> q;
-    
-    visited.insert(start);
-    q.push(start);
-
-    while (!q.empty()) {
-        std::string current = q.front();
-        q.pop();
-        func(current);
-
-        std::vector<std::string> neighbors;
-        for (const auto &neighbour : vertices[current]) {
-            neighbors.push_back(neighbour.first);
-        }
-        std::sort(neighbors.begin(), neighbors.end());
-
-        for (const auto &neighbor : neighbors) {
-            if (visited.find(neighbor) == visited.end()) {
-                visited.insert(neighbor);
-                q.push(neighbor);
-            }
-        }
+    //iterate list, finding all unvisited adjacent vertices and enqueueing them
+    while (cur != nullptr) {
+      if (!cur->toVert->visited) { 
+        cur->toVert->visited = true;
+        vq.push(cur->toVert);
+      }
+      cur = cur->next;
     }
+  }
+  //reset visited fields to false. there is definitely a better way to do this.
+  for (auto *v : verts) {
+    v->visited = false;
+  }
 }
-
 
 // store the weights in a map
 // store the previous label in a map
 pair<map<string, int>, map<string, string>>
 Graph::dijkstra(const string &startLabel) const {
-    map<string, int> weights;
-    map<string, string> previous;
+  map<string, int> weights;
 
-    if (vertices.find(startLabel) == vertices.end()) 
-        return make_pair(weights, previous);
+  // <label of current edge, label of previous>
+  map<string, string> previous;
+  set<Vertex*>vSet;
+  set<Vertex*>::iterator it;
 
-    set<string> unvisited;
-    priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
+  Vertex *vStart;
+  Vertex::Edge *cur;
 
-    // Initialize weights and previous maps, and populate the unvisited set
-    for (const auto &vertexPair : vertices) {
-        const string &vertex = vertexPair.first;
-        weights[vertex] = INT_MAX;
-        previous[vertex] = "";
-        unvisited.insert(vertex);
-    }
+  int iterations {0}; //temporary
 
-    // Distance from start vertex to itself is always 0
-    weights[startLabel] = 0;
-    pq.push({0, startLabel});
-
-    while (!pq.empty()) {
-        string currentVertex = pq.top().second;
-        pq.pop();
-
-        // If the current vertex hasn't been visited yet
-        if (unvisited.find(currentVertex) != unvisited.end()) {
-            unvisited.erase(currentVertex);
-
-            for (const auto &neighborPair : vertices.at(currentVertex)) {
-                const string &neighbor = neighborPair.first;
-                int edgeWeight = neighborPair.second;
-
-                // Relaxation step
-                if (weights[currentVertex] + edgeWeight < weights[neighbor]) {
-                    weights[neighbor] = weights[currentVertex] + edgeWeight;
-                    previous[neighbor] = currentVertex;
-                    pq.push({weights[neighbor], neighbor});
-                }
-            }
-        }
-    }
-
-    weights.erase(startLabel);
-    previous.erase(startLabel);
-    for (auto it = weights.begin(); it != weights.end();) {
-        if (it->second == INT_MAX) {
-            it = weights.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
-    for (auto it = previous.begin(); it != previous.end();) {
-        if (weights.find(it->first) == weights.end()) {
-            it = previous.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
+  if (!contains(startLabel)) {
+    std::cout << "Does not contain " << startLabel << endl;
     return make_pair(weights, previous);
+  }
+  //setting initial vertex set
+  for (auto *v : verts) {
+    if (v->label == startLabel) {
+      vSet.insert(v);
+      cout << "Inserting startLabel '" << startLabel << "' into vSet" << endl;
+      vStart = v;
+    }
+  }
+  //setting initial weights
+  for ( Vertex *v : vSet) {
+    cur = v->next;
+    while (cur != nullptr) {
+      weights.insert(pair<string, int>(cur->toVert->label, cur->weight));
+      previous.insert(pair<string, string>(cur->toVert->label, v->label));
+      cur = cur->next;
+    }
+  }
+  cout << "initial weights: ";
+  for (auto a : weights) {
+    cout << "(" <<  a.first << "," << a.second << ")" ;
+  }
+  cout << endl;
+
+  //completes(?) when all vertices have been added to the set
+  while (iterations <= verts.size()) {
+    Vertex *vAdd;
+    int minWeight INT16_MAX;
+    
+     //start from the top each iteration
+    
+    cout << "starting from the top, vertex: " << vStart->label << ". (should equal: " << startLabel << ")" << endl;
+    //finding vertex with lowest weight NOT in vSet and adding it
+    for (auto *v : vSet) {
+      cur = v->next;
+      while (cur != nullptr) {
+      // vSet.find(cur->toVert) finds a vertex in the set and returns pointer. 
+        if (cur->toVert == vStart ) {
+          cur = cur->next;
+          continue;
+        }
+        if (weights[cur->toVert->label] < minWeight && *vSet.find(cur->toVert) != cur->toVert) {
+          minWeight = cur->weight;
+        
+          vAdd = cur->toVert;
+        }
+        cur = cur->next;
+      }
+    }
+    
+    //add lowest weight vertex not in vAdd to the set
+    vSet.insert(vAdd);
+    iterations ++;
+
+    cout << "current vSet: ";
+    for (auto *a : vSet) {
+      cout << a->label << " ";
+    }
+    cout << endl;
+
+    //starting from the added vertex, search for adjacent ones
+    cur = vAdd->next;
+    while (cur != nullptr) {
+      cout << "comparing path lengths..." << endl;
+      if (cur->toVert == vStart ) {
+        cur = cur->next;
+        continue;
+      }
+      // using adjacency list, so vertices not adjacent to start will not be present in weights until a path is found.
+      if (weights.count(cur->toVert->label) == 0 ) {
+        cout << " vertex: " << cur->toVert->label << " not connected to start, adding to weights";
+        weights.insert(pair<string, int> (cur->toVert->label, cur->weight + weights[vAdd->label]));
+        //connected to added vertex, not to starting vertex
+        cout << "and connecting to " << vAdd->label << " in previous" << endl;
+        previous.insert(pair<string, string>(cur->toVert->label, vAdd->label));
+      }
+      // going via cur->toVert is a shorter path than in weights and isn't in vSet
+      else if (cur->weight + weights.at(vAdd->label) < weights.at(cur->toVert->label) && *vSet.find(cur->toVert) != cur->toVert) {
+        weights[cur->toVert->label] = cur->weight + weights[vAdd->label];
+        previous[cur->toVert->label] = vAdd->label;
+      }
+      //int pathLength = cur->weight + weights[vAdd->label];
+      
+      cur = cur->next;
+    }
+    cout << "minWeight is now: " << minWeight << endl;
+  }
+  
+  return make_pair(weights, previous);
 }
 
 // minimum spanning tree using Prim's algorithm
 int Graph::mstPrim(const string &startLabel,
                    void visit(const string &from, const string &to,
                               int weight)) const {
-    // Initialize all vertices as not visited
-    if (vertices.find(startLabel) == vertices.end()) {
-        return -1;
+  if (!contains(startLabel)) {
+    std::cout << "Does not contain " << startLabel << endl;
+    return -1;
+  }
+  if (directional) {
+    cout << "Prim's algorithm does not work with directed graphs" << endl;
+    return -1;
+  }
+  vector<Vertex*> primv;
+  Vertex *fromv;
+  //pointer for edge to add to mst
+  
+  //pointer to edge for iteration
+  Vertex::Edge *cur {nullptr};
+ 
+  int minPath = 0;
+  
+  for (auto *v : verts) {
+    if (v->label == startLabel) {
+      v->visited = true;
+      primv.push_back(v);
     }
-
-    unordered_map<string, bool> visited;
-    
-    for (const auto &pair : vertices) {
-        visited[pair.first] = false;
-    }
-
-    // Set the start vertex as visited
-    visited[startLabel] = true;
-
-    int mstWeight = 0;
-    // The number of edges in MST will be vertices.size() - 1
-    for (size_t i = 1; i < vertices.size(); i++) {
-        int minWeight = INT_MAX;
-        string u, v;
-
-        // Find the minimum weight edge from the set of visited vertices
-        // Find the minimum weight edge from the set of visited vertices
-    for (const auto &src : vertices) {
-        for (const auto &dest : src.second) {
-            if (visited[src.first] && !visited[dest.first] && dest.second < minWeight) {
-                u = src.first;
-                v = dest.first;
-                minWeight = dest.second;
-            }
+  }
+  while (primv.size() < verts.size()) {
+    Vertex::Edge *edge;
+    int minEdge = 0;
+    for (auto *v : primv) {
+      cur = v->next;
+      cout << "checking vertex " << v->label << endl;
+      while (cur != nullptr) {
+        cout << "checking edge to " << cur->toVert->label << "with weight " << cur->weight << endl;
+        if ((cur->weight < minEdge || minEdge == 0) && !cur->toVert->visited) {
+          minEdge = cur->weight;
+          edge = cur;
+          fromv = v;
+          cout << "new min edge is " << minEdge << " from " << v->label << " to " << edge->toVert->label << endl;
         }
+        cur = cur->next;
+      }
     }
-
-
-        // Mark the vertex as visited and add the edge weight to the MST weight
-        visited[v] = true;
-        mstWeight += minWeight;
-        visit(u, v, minWeight);
+    if (!edge->toVert->visited) {
+      edge->toVert->visited = true;
+      visit(fromv->label, edge->toVert->label, edge->weight);
+      for (auto *v : verts) {
+        if (v->label == fromv->label) {
+           primv.push_back(edge->toVert);
+        }
+      }
+      cout << primv.size() << endl;
+      minPath += edge->weight;
+      cout << "min path length: " << minPath << endl;
     }
+    else {
+      break;
+    }
+  }
+  
 
-    return mstWeight;
+  //reset visited fields to false. there is definitely a better way to do this.
+  for (auto *v : verts) {
+    v->visited = false;
+  }
+  return minPath;
 }
 
 // minimum spanning tree using Kruskal's algorithm
-int Graph::mstKruskal(void visit(const string &from, const string &to, int weight)) const {
-    // Initialize the parent and rank structures.
-    for (const auto &vertex : vertices) {
-        parent[vertex.first] = vertex.first;
-        rank[vertex.first] = 0;
-    }
+//int Graph::mstKruskal(void visit(const string &from, const string &to,
+//                                 int weight)) const {
+//  return -1;
+//}
 
-    // Get all edges from the graph and sort them.
-    vector<pair<int, pair<string, string>>> edges;
-    for (const auto &vertex : vertices) {
-        for (const auto &neighbor : vertex.second) {
-            if (vertex.first < neighbor.first) {
-                edges.push_back({neighbor.second, {vertex.first, neighbor.first}});
-            }
-        }
-    }
-    sort(edges.begin(), edges.end());
-
-    int mstWeight = 0;
-    for (const auto &edge : edges) {
-        string root1 = findSet(edge.second.first);
-        string root2 = findSet(edge.second.second);
-        
-        // Check if the edge causes a cycle
-        if (root1 != root2) {
-            mstWeight += edge.first;
-            visit(edge.second.first, edge.second.second, edge.first);
-            unionSets(root1, root2);
-        }
-    }
-
-    return mstWeight;
-}
-
-// Read edges from file
-  // first line of file is an integer, indicating number of edges
-  // each line represents an edge in the form of "string string int"
-  // vertex labels cannot contain spaces
-  // @return true if file successfully read
+// read a text file and create the graph
 bool Graph::readFile(const string &filename) {
   ifstream myfile(filename);
   if (!myfile.is_open()) {
@@ -362,38 +531,4 @@ bool Graph::readFile(const string &filename) {
   }
   myfile.close();
   return true;
-}
-
-string Graph::findSet(const string &vertex) const {
-    // If the vertex is not its own representative (i.e., not the root of its set)
-    // Recursively find the representative of the set and path compress.
-    if (vertex != parent[vertex])
-        parent[vertex] = findSet(parent[vertex]);
-
-    // Return the representative (root) of the set the vertex belongs to.
-    return parent[vertex];
-}
-
-bool Graph::unionSets(const string &u, const string &v) const {
-    // Find the representatives (roots) of the sets u and v belong to.
-    string pu = findSet(u);
-    string pv = findSet(v);
-
-    // If u and v are in the same set, return false to indicate no union performed.
-    if (pu == pv) return false;
-
-    // Make the root of the smaller rank tree point to the root of the larger rank tree.
-    if (rank[pu] < rank[pv]) std::swap(pu, pv);
-    parent[pv] = pu;
-
-    // If both trees have the same rank, increase the rank of the resulting tree.
-    if (rank[pu] == rank[pv]) rank[pu]++;
-
-    // Return true to indicate that a union was performed.
-    return true;
-}
-
-
-const std::unordered_map<std::string, std::unordered_map<std::string, int>>& Graph::getVertices() const {
-    return vertices;
 }
