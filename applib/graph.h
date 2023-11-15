@@ -8,134 +8,26 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <iostream>
+#include "edge.h"
+#include "vertex.h"
 #include <map>
-#include <queue>
-#include <set>
-#include <stack>
 #include <string>
-#include <vector>
 
 using namespace std;
 
 class Graph {
-
-  // some forward declarations
-  struct Edge;
-  struct Vertex;
-
-  // a map of vertexes and thier labels
-  map<string, Vertex *> vmap;
-
-  // a map of the edges in the graph
-  vector<Edge *> edges;
-
-private:
-  // implementation of an edge
-  struct Edge {
-    Vertex *to;
-    Vertex *from;
-    int weight;
-
-    // if the to or/and from vertex don't exist they will be created
-    // an edge storing to and from vertex * and weight will be made
-    explicit Edge(string inFrom, string inTo, int inWeight, Graph *g) {
-      weight = inWeight;
-      // todo if directional
-      if (g->vmap.count(inTo) == 1 &&
-          g->vmap.count(inFrom) == 1) { // both vertex are already in the graph
-        to = g->vmap[inTo];     // setting the edge's to* to the vertex in vmap
-        from = g->vmap[inFrom]; // same lol
-      } else if (g->vmap.count(inTo) == 1) { // need to create new from vertex
-        to = g->vmap[inTo];
-        Vertex *newFrom = new Vertex(inFrom);
-        g->vmap[inFrom] = newFrom;
-        from = newFrom;
-      } else if (g->vmap.count(inFrom) == 1) { // need to create new to vertex
-        from = g->vmap[inFrom];
-        Vertex *newTo = new Vertex(inTo);
-        g->vmap[inTo] = newTo;
-        to = newTo;
-      } else {
-        Vertex *newTo = new Vertex(inTo);
-        g->vmap[inTo] = newTo;
-        to = newTo;
-        Vertex *newFrom = new Vertex(inFrom);
-        g->vmap[inFrom] = newFrom;
-        from = newFrom;
-      }
-    }
-  };
-
-  // implementation of a vertex
-  struct Vertex {
-    string label;
-    vector<Edge *> neighbors;
-
-    explicit Vertex(string str) { label = str; }
-  };
-
 public:
-  // method that checks if the edge already exists
-  bool isDupeEdge(string from, string to);
-
-  // method that checks if the edge is in the provided vector
-  static bool isEdgeInVector(const Edge *edgeToFind,
-                             const std::vector<Edge *> &edgeVector);
-
-  // variable reflecting directionality of graph
-  bool isDirectional = true;
-
-  // checks to see if the edge already exists
-  bool edgeExists(const string &from, const string &to);
-
-  // returns a list of Edges adjacent to the miniumum spanning tree
-  vector<Edge *> adjToMst(vector<Edge *> mst, set<string> visited) const;
-
-  // returns the edge the closest to mst
-  static Edge *getMinEdge(vector<Edge *> adjToMst);
-
-  // returns the index of the edge
-  int edgeIndex(const string &to);
-
-  // returns the index of the edge in the neighbor list of a vertex
-  int edgeNeighborIndex(const string &from, const string &to) const;
-
-  // sorts the provided stack
-  static stack<Vertex *> sortStack(std::stack<Vertex *> inputStack);
-
-  // gets the vertex that matches the input
-  Vertex *get(string input) const;
-
-  // the first node in the graph;
-  Vertex *source;
-
-  // default constructor
-  Graph();
-
   // constructor, empty graph
-  explicit Graph(bool directionalEdges);
-
-  // copy not allowed
-  Graph(const Graph &other) = delete;
-
-  // move not allowed
-  Graph(Graph &&other) = delete;
-
-  // assignment not allowed
-  Graph &operator=(const Graph &other) = delete;
-
-  // move assignment not allowed
-  Graph &operator=(Graph &&other) = delete;
+  explicit Graph(bool DirectionalEdges = true);
 
   /** destructor, delete all vertices and edges */
   ~Graph();
 
   // @return true if vertex added, false if it already is in the graph
-  bool add(const string &label);
+  bool add(const string &Label);
 
   // @return true if vertex is in the graph
-  bool contains(const string &label) const;
+  bool contains(const string &Label) const;
 
   // @return total number of vertices
   int verticesSize() const;
@@ -145,35 +37,35 @@ public:
   // For digraphs (directed graphs), only one directed edge allowed, P->Q
   // Undirected graphs must have P->Q and Q->P with same weight
   // @return true if successfully connected
-  bool connect(const string &from, const string &to, int weight = 0);
+  bool connect(const string &From, const string &To, int Weight = 0);
 
   // Remove edge from graph
   // @return true if edge successfully deleted
-  bool disconnect(const string &from, const string &to);
+  bool disconnect(const string &From, const string &To);
 
   // @return total number of edges
   int edgesSize() const;
 
   // @return number of edges from given vertex, -1 if vertex not found
-  int vertexDegree(const string &label) const;
+  int neighborsSize(const string &Label) const;
 
   // @return string representing edges and weights, "" if vertex not found
   // A-3->B, A-5->C should return B(3),C(5)
-  string getEdgesAsString(const string &label) const;
+  string getEdgesAsString(const string &Label) const;
 
   // Read edges from file
   // first line of file is an integer, indicating number of edges
   // each line represents an edge in the form of "string string int"
   // vertex labels cannot contain spaces
   // @return true if file successfully read
-  bool readFile(const string &filename);
+  bool readFile(const string &Filename);
 
   // depth-first traversal starting from given startLabel
-  void dfs(const string &startLabel, void visit(const string &label));
+  void dfs(const string &StartLabel, void Visit(const string &Label));
 
   // breadth-first traversal starting from startLabel
   // call the function visit on each vertex label */
-  void bfs(const string &startLabel, void visit(const string &label));
+  void bfs(const string &StartLabel, void Visit(const string &Label));
 
   // dijkstra's algorithm to find shortest distance to all other vertices
   // and the path to all other vertices
@@ -181,15 +73,25 @@ public:
   // How to get to the vertex is recorded previous["F"] = "C"
   // @return a pair made up of two map objects, Weights and Previous
   pair<map<string, int>, map<string, string>>
-  dijkstra(const string &startLabel) const;
+  dijkstra(const string &StartLabel) const;
 
-  // minimum spanning tree using Prim's algorithm
+  // minimum spanning tree
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
-  int mstPrim(const string &startLabel,
-              void visit(const string &from, const string &to,
-                         int weight)) const;
+  int mst(const string &StartLabel,
+          void Visit(const string &From, const string &To, int Weight));
+
+          //also trying w/o const!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+private:
+  // default is directional edges is true,
+  // can only be modified when graph is initially created
+  // when set to false,
+  // create 2 edges, one from P->Q and another from Q->P with same weight
+  bool DirectionalEdges;
+
+  // add additional variables and functions as needed
 };
 
 #endif // GRAPH_H
