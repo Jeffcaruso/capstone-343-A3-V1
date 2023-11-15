@@ -1,38 +1,70 @@
 /**
- * A Graph is made up of Vertex objects that hold data values
- * A vertex is connected to other vertices via Edges
- * A vertex can be visited/unvisited
- * Can connect to another vertex via directed edge with weight
- * The edge can be disconnected
- * A vertex cannot have an edge back to itself
- * getNextNeighbor returns the next neighbor each time it is called
- * when there are no more neighbors, the vertex label is returned
+ * A vertex stores a list of all connected verticies.
+ * Vertexes store edges, and the weights of those edges. 
  */
 
 #ifndef VERTEX_H
 #define VERTEX_H
 
-#include "edge.h"
+#include <map>
 #include <string>
 #include <vector>
-
 
 using namespace std;
 
 class Vertex {
-  friend class Graph;
-  friend class Edge;
-  friend ostream &operator<<(ostream &Os, const Vertex &V);
-
 public:
-  /** Creates an unvisited vertex, gives it a label, and clears its
-      adjacency list.
-      NOTE: A vertex must have a unique label that cannot be changed. */
-  explicit Vertex(const string &Label);
+  // constructor, vertex with no connections
+  explicit Vertex(string label);
 
-  /** Destructor. Delete all edges from this vertex to other vertices */
+  // copy not allowed
+  Vertex(const Vertex &other) = delete;
+
+  // move not allowed
+  Vertex(Vertex &&other) = delete;
+
+  // assignment not allowed
+  Vertex &operator=(const Vertex &other) = delete;
+
+  // move assignment not allowed
+  Vertex &operator=(Vertex &&other) = delete;
+
+  /** destructor, delete the vertex */
   ~Vertex();
 
+  // Determine if a vertex is connected to another one
+  // @return true if the vertex has a connection to the given vertex
+  bool connects(const string &label) const;
+
+  // Add a connection to another vertex
+  // @return true if the vertex is NOW connected to the given vertex
+  bool add(string label, int weight);
+
+  // Removes a connection to another vertex
+  // @return true if the vertex is NO LONGER connected to the given vertex
+  bool remove(string label);
+
+  // Returns the number of connected edges a vertex has
+  // @return int number representing number of outgoing connecting edges
+  int getDegree();
+
+  // Returns the contents of the connection map as string
+  // @return string representing the connections of the vertex
+  string getEdgesString();
+
+  // Returns the contents of the connection map as vector
+  // @return vector representing the connections of the vertex
+  vector<string> getEdgesVector();
+
+  // Returns the contents of the connection map as vector pair
+  // @return vector representing the connections and weights of the vertex
+  vector<pair<string,int>> getWeightedEdgesVector();
+
+private:
+  //A map containing the label names of all connecting edges from this vertex, and their weighted values.
+  map<string,int> edges; 
+  //The label of our vertex
+  string label;
 };
 
-#endif  //  ASS3_GRAPHS_VERTEX_H
+#endif // VERTEX_H
