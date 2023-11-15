@@ -8,51 +8,16 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <climits>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
 
+
 using namespace std;
 
 class Graph {
-private:
-
-  bool directional;
-
-  //list object representing an edge between two connected vertices
-  
-
-  struct Vertex{
-    
-    struct Edge {
-
-    Vertex *fromVert {nullptr};
-    Vertex *toVert {nullptr};
-
-    int weight {0};
-
-    struct Edge *next {nullptr};
-    };
-
-    string label;
-
-    bool visited {false}; //there is definitely a better way to do this
-
-    Edge *next {nullptr};
-  };
-
-  //friend void dfsRecursive(void visit(const string &label), const string &label, stack<Vertex*> &s);
-
-  //points to all existing Vertex objects
-  vector<Vertex*> verts;
-
-  int numV;
-
-  void deleteEdges(Vertex::Edge* cur);
-
-  
-  
 public:
   // constructor, empty graph
   explicit Graph(bool directionalEdges = true);
@@ -138,6 +103,27 @@ public:
   // @return length of the minimum spanning tree or -1 if start vertex not
   int mstKruskal(void visit(const string &from, const string &to,
                             int weight)) const;
+private:
+    // Represents an edge between two vertices
+    struct Edge {
+        string to;
+        int weight;
+        Edge(const string& to, int weight) : to(to), weight(weight) {} // constructor
+    };
+
+    // Represents a vertex in the graph
+    struct Vertex {
+        vector<Edge> edges;
+    };
+
+    // indicates if the graph is directed or not
+    bool directionalEdges_;
+
+    // Stores all vertices in the graph with their labels
+    map<string, Vertex> vertices_;
+
+    // Iterates over each edge of the given vertex and recursively calls itself for each connected vertex. Helper function called by dfs
+    void dfsHelper(const string& label, set<string>& visited, void visit(const string& label));
 };
 
 #endif // GRAPH_H
