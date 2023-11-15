@@ -9,9 +9,7 @@
 #define GRAPH_H
 
 #include <map>
-#include <queue>
 #include <set>
-#include <stack>
 #include <string>
 #include <vector>
 
@@ -19,30 +17,6 @@ using namespace std;
 
 class Graph {
 private:
-  // a stucture to represent the connection between two vertexs
-  struct Edge {
-    string start;
-    string destination;
-    int weight;
-    Edge(const string &s, const string &d, int w)
-        : start(s), destination(d), weight(w) {}
-  };
-  // a stucture to represent a vertex
-  struct Vertex {
-    string label;
-    vector<Edge *> edges;
-    explicit Vertex(const string &l) : label(l) {}
-    ~Vertex() {
-      for (Edge *e : edges) {
-        delete e;
-      }
-      edges.clear();
-    }
-  };
-
-  map<string, Vertex *> vertices;
-  bool directionalEdges;
-
 public:
   // constructor, empty graph
   explicit Graph(bool directionalEdges = true);
@@ -102,17 +76,9 @@ public:
   // depth-first traversal starting from given startLabel
   void dfs(const string &startLabel, void visit(const string &label));
 
-  // used to recursively travel the graph in depth-first order
-  void dfsHelper(const string &currentLabel, void visit(const string &label),
-                 set<string> &seen);
-
   // breadth-first traversal starting from startLabel
   // call the function visit on each vertex label */
   void bfs(const string &startLabel, void visit(const string &label));
-
-  // used to recursively travel the graph in breadth-first order
-  void bfsHelper(const string &currentLabel, void visit(const string &label),
-                 set<string> &seen);
 
   // dijkstra's algorithm to find shortest distance to all other vertices
   // and the path to all other vertices
@@ -122,9 +88,6 @@ public:
   pair<map<string, int>, map<string, string>>
   dijkstra(const string &startLabel) const;
 
-  // return the label for the vertex with the minimum weight
-  static string removeMin(map<Vertex *, int> &q);
-
   // minimum spanning tree using Prim's algorithm
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
@@ -133,20 +96,55 @@ public:
               void visit(const string &from, const string &to,
                          int weight)) const;
 
-  // goes through the weights of the edges returning the lowest one and tracking
-  // the edge that was visited.
-  static int
-  mstPrimHelper(const string &currentLabel,
-                void visit(const string &from, const string &to, int weight),
-                map<string, vector<Edge *>> edgeCosts, stack<string> unvisited,
-                map<string, string> visitedEdges);
-
   // minimum spanning tree using Kruskal's algorithm
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
-  // int mstKruskal(void visit(const string &from, const string &to,
-  //                           int weight)) const;
+  int mstKruskal(void visit(const string &from, const string &to,
+                            int weight)) const;
+
+  
+
+  //Master map holding within every vertex and connections
+  //First string is for easy identifying
+  //Second map: string is connecting other vertex and int is distance
+  map<string, map<string, int*>> allVertexes;
+
+  //Keep tracks of directional edge
+  bool directionalEdgeCheck;
+
 };
 
 #endif // GRAPH_H
+
+  //Other:
+
+    //Key value pairs, first element is our vertex
+    //second value map is paired and connected to our set of edges
+    //int is our measured distance
+    //map<string, map<string, int>> edge;
+
+  //Keep tracks of edges, connections
+  //struct edge{
+  //  vertex* from;
+  //  vertex* to;
+  //  int distance;
+  //};
+
+    //Keep tracks of vertex, nodes
+  //Each vertex carries a value and has connections to
+  //Other vertexes with corresponding distances
+  //struct vertex{
+    //Storing this vertex's value, "from value"
+    //string vertexVal;
+
+    //Map pairs
+    //First value is vertex with all connected "to values"
+    //second value is the distance between each other
+    //map<struct vertex*, int> mapEdges;
+
+    //};
+
+  //Master map holding within every vertex and connections
+  //String is for easy identifying
+  //map<string, vertex*> allVertexes;
