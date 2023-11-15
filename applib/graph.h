@@ -8,16 +8,41 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <climits>
 #include <map>
+#include <queue>
 #include <set>
+#include <stack>
 #include <string>
 #include <vector>
-
 
 using namespace std;
 
 class Graph {
+private:
+  // a stucture to represent the connection between two vertexs
+  struct Edge {
+    string start;
+    string destination;
+    int weight;
+    Edge(const string &s, const string &d, int w)
+        : start(s), destination(d), weight(w) {}
+  };
+  // a stucture to represent a vertex
+  struct Vertex {
+    string label;
+    vector<Edge *> edges;
+    explicit Vertex(const string &l) : label(l) {}
+    ~Vertex() {
+      for (Edge *e : edges) {
+        delete e;
+      }
+      edges.clear();
+    }
+  };
+
+  map<string, Vertex *> vertices;
+  bool directionalEdges;
+
 public:
   // constructor, empty graph
   explicit Graph(bool directionalEdges = true);
@@ -77,9 +102,17 @@ public:
   // depth-first traversal starting from given startLabel
   void dfs(const string &startLabel, void visit(const string &label));
 
+  // used to recursively travel the graph in depth-first order
+  void dfsHelper(const string &currentLabel, void visit(const string &label),
+                 set<string> &seen);
+
   // breadth-first traversal starting from startLabel
   // call the function visit on each vertex label */
   void bfs(const string &startLabel, void visit(const string &label));
+
+  // used to recursively travel the graph in breadth-first order
+  void bfsHelper(const string &currentLabel, void visit(const string &label),
+                 set<string> &seen);
 
   // dijkstra's algorithm to find shortest distance to all other vertices
   // and the path to all other vertices
@@ -89,6 +122,9 @@ public:
   pair<map<string, int>, map<string, string>>
   dijkstra(const string &startLabel) const;
 
+  // return the label for the vertex with the minimum weight
+  static string removeMin(map<Vertex *, int> &q);
+
   // minimum spanning tree using Prim's algorithm
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
@@ -97,33 +133,20 @@ public:
               void visit(const string &from, const string &to,
                          int weight)) const;
 
+  // goes through the weights of the edges returning the lowest one and tracking
+  // the edge that was visited.
+  static int
+  mstPrimHelper(const string &currentLabel,
+                void visit(const string &from, const string &to, int weight),
+                map<string, vector<Edge *>> edgeCosts, stack<string> unvisited,
+                map<string, string> visitedEdges);
+
   // minimum spanning tree using Kruskal's algorithm
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
-  int mstKruskal(void visit(const string &from, const string &to,
-                            int weight)) const;
-private:
-    // Represents an edge between two vertices
-    struct Edge {
-        string to;
-        int weight;
-        Edge(const string& to, int weight) : to(to), weight(weight) {} // constructor
-    };
-
-    // Represents a vertex in the graph
-    struct Vertex {
-        vector<Edge> edges;
-    };
-
-    // indicates if the graph is directed or not
-    bool directionalEdges_;
-
-    // Stores all vertices in the graph with their labels
-    map<string, Vertex> vertices_;
-
-    // Iterates over each edge of the given vertex and recursively calls itself for each connected vertex. Helper function called by dfs
-    void dfsHelper(const string& label, set<string>& visited, void visit(const string& label));
+  // int mstKruskal(void visit(const string &from, const string &to,
+  //                           int weight)) const;
 };
 
 #endif // GRAPH_H
