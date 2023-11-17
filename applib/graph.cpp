@@ -326,8 +326,6 @@ int Graph::mst(const string &StartLabel,
 //                           int Weight)) const {
 //  to w/o that last const...?
 
-// maybe issue here is using assert and not Gtest...?
-
 // read a text file and create the graph
 bool Graph::readFile(const string &filename) {
   ifstream myfile(filename);
