@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -107,12 +108,14 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 			return false;
 		}
 	}
-	Edge newEdge(From, To, Weight);
-	edgeMap[from].push_back(newEdge);
+	Vertex fr(From);
+	Vertex t(To);	
+	Edge newEdge(fr, t, Weight);
+	edgeMap[From].push_back(newEdge);
 	if (!DirectionalEdges)
 	{
-		Edge secondEdge(To, From, Weight);
-		edgeMap[to].push_back(secondEdge);
+		Edge secondEdge(t, fr, Weight);
+		edgeMap[To].push_back(secondEdge);
 	}
 	return true;
 }
