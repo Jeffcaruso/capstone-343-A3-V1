@@ -20,6 +20,9 @@ using namespace std;
 
 class Graph {
 public:
+  friend class Edge;
+  friend class Vertex;
+
   // constructor, empty graph
   explicit Graph(bool DirectionalEdges = true);
 

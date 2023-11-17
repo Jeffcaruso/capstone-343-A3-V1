@@ -71,15 +71,15 @@ string Graph::getEdgesAsString(const string &Label) const
 	{
 		if (Label == edge.To)
 		{
-			if (directional)
+			if (DirectionalEdges)
 			{
 				continue;
 			}
-			edgeString += edge.start;
+			edgeString += edge.From;
 		}
 		else
 		{
-			edgeString += edge.end;
+			edgeString += edge.To;
 		}
 		edgeString += "(" + to_string(edge.weight) + "),";
 	}
