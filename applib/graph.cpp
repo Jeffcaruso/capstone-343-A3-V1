@@ -34,42 +34,42 @@ int Graph::edgesSize() const
 // @return number of edges from given vertex, -1 if vertex not found
 int Graph::neighborsSize(const string &Label) const
 {
-	if (edgeMap.count(label) == 0)
+	if (edgeMap.count(Label) == 0)
 	{
 		return -1;
 	}
-	return edgeMap.at(label).size();
+	return edgeMap.at(Label).size();
 }
 
 // @return true if vertex added, false if it already is in the graph
 bool Graph::add(const string &Label)
 {
-	if (contains(label))
+	if (contains(Label))
 	{
 		return false;
 	}
-	vertices.insert(label);
-	edgeMap[label] = vector<Edge>();
+	vertices.insert(Label);
+	edgeMap[Label] = vector<Edge>();
 	return true;
 }
 
 /** return true if vertex already in graph */
-bool Graph::contains(const std::string &Label) const { return vertices.find(label) != vertices.end(); }
+bool Graph::contains(const std::string &Label) const { return vertices.find(Label) != vertices.end(); }
 
 // @return string representing edges and weights, "" if vertex not found
 // A-3->B, A-5->C should return B(3),C(5)
 string Graph::getEdgesAsString(const string &Label) const
 {
-	if (!contains(label))
+	if (!contains(Label))
 	{
 		return "";
 	}
 	string edgeString;
-	vector<Edge> edges(edgeMap.at(label));
+	vector<Edge> edges(edgeMap.at(Label));
 	sort(edges.begin(), edges.end());
 	for (auto edge : edges)
 	{
-		if (label == edge.end)
+		if (Label == edge.end)
 		{
 			if (directional)
 			{
@@ -158,14 +158,14 @@ bool Graph::disconnect(const string &From, const string &To)
 
 // depth-first traversal starting from given startLabel
 void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
-	if (!contains(startLabel))
+	if (!contains(StartLabel))
 	{
 		return;
 	}
 	stack<string> toVisit;
 	unordered_map<string, bool> visited;
-	visited[startLabel] = true;
-	toVisit.push(startLabel);
+	visited[StartLabel] = true;
+	toVisit.push(StartLabel);
 	while (!toVisit.empty())
 	{
 		string label = toVisit.top();
@@ -191,14 +191,14 @@ void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
 // breadth-first traversal starting from startLabel
 void Graph::bfs(const string &StartLabel, void Visit(const string &Label))
 {
-	if (!contains(startLabel))
+	if (!contains(StartLabel))
 	{
 		return;
 	}
 	queue<string> toVisit;
 	unordered_map<string, bool> visited;
-	visited[startLabel] = true;
-	toVisit.push(startLabel);
+	visited[StartLabel] = true;
+	toVisit.push(StartLabel);
 	while (!toVisit.empty())
 	{
 		string label = toVisit.front();
@@ -284,12 +284,12 @@ int Graph::mst(const string &StartLabel,
 						  int Weight))
 {
 	//Prim's Algo
-	if (directional || !contains(startLabel))
+	if (directional || !contains(StartLabel))
 	{
 		return -1;
 	}
 	unordered_map<string, bool> mst;
-	mst[startLabel] = true;
+	mst[StartLabel] = true;
 	int totalWeight = 0;
 	bool finished = false;
 	while (!finished)
