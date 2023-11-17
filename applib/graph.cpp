@@ -114,7 +114,7 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 	edgeMap[From].push_back(newEdge);
 	if (!DirectionalEdges)
 	{
-		Edge secondEdge(t, fr, Weight);
+		Edge secondEdge(*t, *fr, Weight);
 		edgeMap[To].push_back(secondEdge);
 	}
 	return true;
@@ -129,7 +129,7 @@ bool Graph::disconnect(const string &From, const string &To)
 	}
 	bool removed = false;
 	vector<Edge> toRemove;
-	for (auto &edge : edgeMap[from])
+	for (auto &edge : edgeMap[From])
 	{
 		if (edge.end == To || edge.start == To)
 		{
@@ -139,12 +139,12 @@ bool Graph::disconnect(const string &From, const string &To)
 	}
 	for (auto &edge : toRemove)
 	{
-		vector<Edge> &edgeMapFrom = edgeMap[from];
+		vector<Edge> &edgeMapFrom = edgeMap[From];
 		edgeMapFrom.erase(remove(edgeMapFrom.begin(), edgeMapFrom.end(), edge),
 						  edgeMapFrom.end());
 	}
 	toRemove.clear();
-	for (auto &edge : edgeMap[to])
+	for (auto &edge : edgeMap[To])
 	{
 		if (edge.end == From)
 		{
@@ -153,7 +153,7 @@ bool Graph::disconnect(const string &From, const string &To)
 	}
 	for (auto &edge : toRemove)
 	{
-		vector<Edge> &edgeMapTo = edgeMap[to];
+		vector<Edge> &edgeMapTo = edgeMap[To];
 		edgeMapTo.erase(remove(edgeMapTo.begin(), edgeMapTo.end(), edge),
 						edgeMapTo.end());
 	}
