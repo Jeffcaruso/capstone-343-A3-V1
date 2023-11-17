@@ -93,6 +93,8 @@ private:
   bool DirectionalEdges;
 
   // add additional variables and functions as needed
+  unordered_map<string, vector<Edge>> edgeMap;
+  unordered_set<string> vertices;
 };
 
 #endif // GRAPH_H
