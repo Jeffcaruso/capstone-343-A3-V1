@@ -84,6 +84,13 @@ public:
 
           //also trying w/o const!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  // Read edges from file
+  // first line of file is an integer, indicating number of edges
+  // each line represents an edge in the form of "string string int"
+  // vertex labels cannot contain spaces
+  // @return true if file successfully read
+  bool readFile(const string &filename);
+
 private:
   // default is directional edges is true,
   // can only be modified when graph is initially created
