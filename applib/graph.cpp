@@ -93,22 +93,22 @@ string Graph::getEdgesAsString(const string &Label) const
 // @return true if successfully connected, false if not connected.
 bool Graph::connect(const string &From, const string &To, int Weight)
 {
-	if (from == to)
+	if (From == To)
 	{
 		return false;
 	}
-	add(from);
-	add(to);
-	for (auto edge : edgeMap[from])
+	add(From);
+	add(To);
+	for (auto edge : edgeMap[From])
 	{
-		if (edge.end == to || (!directional && edge.start == to))
+		if (edge.end == to || (!DirectionalEdges && edge.start == to))
 		{
 			return false;
 		}
 	}
 	Edge newEdge(from, to, weight);
 	edgeMap[from].push_back(newEdge);
-	if (!directional)
+	if (!DirectionalEdges)
 	{
 		Edge secondEdge(to, from, weight);
 		edgeMap[to].push_back(secondEdge);
@@ -119,7 +119,7 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 // @return true if edge successfully deleted
 bool Graph::disconnect(const string &From, const string &To)
 {
-	if (from == to || !contains(from) || !contains(to))
+	if (From == To || !contains(From) || !contains(To))
 	{
 		return false;
 	}
@@ -127,7 +127,7 @@ bool Graph::disconnect(const string &From, const string &To)
 	vector<Edge> toRemove;
 	for (auto &edge : edgeMap[from])
 	{
-		if (edge.end == to || edge.start == to)
+		if (edge.end == To || edge.start == To)
 		{
 			toRemove.push_back(edge);
 			removed = true;
