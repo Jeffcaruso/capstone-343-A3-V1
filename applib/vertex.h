@@ -31,7 +31,7 @@ public:
   explicit Vertex(const string &Label);
 
 private:
-  string label
+  string label;
 
   /** Destructor. Delete all edges from this vertex to other vertices */
   ~Vertex();

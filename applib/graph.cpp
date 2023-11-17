@@ -69,17 +69,17 @@ string Graph::getEdgesAsString(const string &Label) const
 	sort(edges.begin(), edges.end());
 	for (auto edge : edges)
 	{
-		if (Label == edge.To)
+		if (Label == edge.end)
 		{
 			if (DirectionalEdges)
 			{
 				continue;
 			}
-			edgeString += edge.From;
+			edgeString += edge.start;
 		}
 		else
 		{
-			edgeString += edge.To;
+			edgeString += edge.end;
 		}
 		edgeString += "(" + to_string(edge.weight) + "),";
 	}
