@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -101,16 +102,16 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 	add(To);
 	for (auto edge : edgeMap[From])
 	{
-		if (edge.end == to || (!DirectionalEdges && edge.start == to))
+		if (edge.end == To || (!DirectionalEdges && edge.start == To))
 		{
 			return false;
 		}
 	}
-	Edge newEdge(from, to, weight);
+	Edge newEdge(From, To, Weight);
 	edgeMap[from].push_back(newEdge);
 	if (!DirectionalEdges)
 	{
-		Edge secondEdge(to, from, weight);
+		Edge secondEdge(To, From, Weight);
 		edgeMap[to].push_back(secondEdge);
 	}
 	return true;
@@ -142,7 +143,7 @@ bool Graph::disconnect(const string &From, const string &To)
 	toRemove.clear();
 	for (auto &edge : edgeMap[to])
 	{
-		if (edge.end == from)
+		if (edge.end == From)
 		{
 			toRemove.push_back(edge);
 		}
