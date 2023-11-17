@@ -54,7 +54,7 @@ bool Graph::add(const string &Label)
 }
 
 /** return true if vertex already in graph */
-bool Graph::contains(const std::string &Label) const { return vertices.find(Label) != vertices.To; }
+bool Graph::contains(const std::string &Label) const { return vertices.find(Label) != vertices.end(); }
 
 // @return string representing edges and weights, "" if vertex not found
 // A-3->B, A-5->C should return B(3),C(5)
