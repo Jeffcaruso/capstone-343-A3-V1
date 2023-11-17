@@ -16,6 +16,6 @@
 using namespace std;
 
 ostream &operator<<(ostream &Os, const Vertex &V) { return Os; }
-Vertex::Vertex(const string &Label) {}
+Vertex::Vertex(const string &Label) {label = Label;}
 
 Vertex::~Vertex() {}

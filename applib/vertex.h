@@ -30,6 +30,9 @@ public:
       NOTE: A vertex must have a unique label that cannot be changed. */
   explicit Vertex(const string &Label);
 
+private:
+  string label
+
   /** Destructor. Delete all edges from this vertex to other vertices */
   ~Vertex();
 

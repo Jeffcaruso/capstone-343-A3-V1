@@ -6,4 +6,9 @@
 
 #include "edge.h"
 
-Edge::Edge(Vertex *From, Vertex *To, int Weight) {}
+
+Edge::Edge(Vertex *From, Vertex *To, int Weight) {
+    start = (*From).label; 
+    end = (*To).label; 
+    weight = Weight;
+}
