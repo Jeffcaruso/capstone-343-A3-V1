@@ -15,7 +15,7 @@ Graph::Graph(bool directedEdges) { DirectionalEdges = directedEdges; }
 
 Graph::~Graph() {}
 
-bool Graph::readFile(const string &Filename) { return true; }
+// bool Graph::readFile(const string &Filename) { return true; }
 
 // @return total number of vertices
 int Graph::verticesSize() const { return vertices.size(); }
