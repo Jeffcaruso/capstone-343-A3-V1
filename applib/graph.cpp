@@ -179,14 +179,14 @@ void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
 	{
 		string label = toVisit.top();
 		toVisit.pop();
-		visit(Label);
+		visit(label);
 		vector<Edge> sorted(edgeMap[label]);
 		sort(sorted.begin(), sorted.end(),
 			 [](Edge a, Edge b)
 			 { return a.end > b.To; });
 		for (auto edge : sorted)
 		{
-			string other = edge.To;
+			string other = edge.end;
 			if (!visited[other])
 			{
 				visited[other] = true;
