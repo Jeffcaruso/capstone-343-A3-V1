@@ -108,8 +108,8 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 			return false;
 		}
 	}
-	Vertex *fr(From);
-	Vertex *t(To);	
+	Vertex fr(From);
+	Vertex t(To);	
 	Edge newEdge(&fr, &t, Weight);
 	edgeMap[From].push_back(newEdge);
 	if (!DirectionalEdges)
