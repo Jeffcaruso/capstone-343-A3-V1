@@ -179,7 +179,7 @@ void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
 	{
 		string label = toVisit.top();
 		toVisit.pop();
-		visit(label);
+		visit(Label);
 		vector<Edge> sorted(edgeMap[label]);
 		sort(sorted.begin(), sorted.end(),
 			 [](Edge a, Edge b)
