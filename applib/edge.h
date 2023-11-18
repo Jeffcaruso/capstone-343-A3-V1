@@ -21,7 +21,7 @@ class Edge
 
 	friend class Graph;
 
-	friend bool operator==(Edge &v1, Edge &v2);
+	friend bool operator==(const Edge &v1, const Edge &v2);
 	friend bool operator<(Edge &v1, Edge &v2);
 
 	string start;
