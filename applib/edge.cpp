@@ -6,6 +6,9 @@
 
 #include "edge.h"
 
+#include <cstring>
+#include <iostream>
+
 
 Edge::Edge(Vertex *From, Vertex *To, int Weight) {
     start = (*From).label; 
@@ -13,7 +16,7 @@ Edge::Edge(Vertex *From, Vertex *To, int Weight) {
     weight = Weight;
 }
 
-Edge &operator==(Edge &v1, Edge &v2){
+bool &operator==(Edge &v1, Edge &v2){
     // TODO: insert return statement here
     if (strcmp(v1.start, v2.start) == 0)
     {
@@ -28,7 +31,7 @@ Edge &operator==(Edge &v1, Edge &v2){
     return false;
 }
 
-Edge &operator<(Edge &v1, Edge &v2)
+bool &operator<(Edge &v1, Edge &v2)
 {
     // TODO: insert return statement here
     if (strcmp(v1.start, v2.start) == 0)
