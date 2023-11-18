@@ -72,7 +72,7 @@ jobs:
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test
   Run_Test_2:
-    needs: build, Run_Test_1
+    needs: [build, Run_Test_1]
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
@@ -92,7 +92,7 @@ jobs:
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_2
   Run_Test_3:
-    needs: build, Run_Test_2
+    needs: [build, Run_Test_2]
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
@@ -112,7 +112,7 @@ jobs:
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_3
   Run_Test_4:
-    needs: build, Run_Test_3
+    needs: [build, Run_Test_3]
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
@@ -133,7 +133,7 @@ jobs:
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_4
   
   Run_Test_5:
-    needs: build, Run_Test_4
+    needs: [build, Run_Test_4]
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
@@ -154,7 +154,7 @@ jobs:
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite -s --track-origins=yes --smc-check=all --error-exitcode=3' --test_output=all //Tests:APP_test_5
 
   Run_Test_6:
-    needs: build, Run_Test_5
+    needs: [build, Run_Test_5]
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
