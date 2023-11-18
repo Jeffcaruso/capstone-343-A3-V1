@@ -16,6 +16,8 @@ Edge::Edge(Vertex *From, Vertex *To, int Weight) {
     weight = Weight;
 }
 
+
+//v1 equal to v2
 bool operator==(const Edge &v1, const Edge &v2){
     // TODO: insert return statement here
     if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
@@ -31,6 +33,7 @@ bool operator==(const Edge &v1, const Edge &v2){
     return false;
 }
 
+//v1 less than v2
 bool operator<(Edge &v1, Edge &v2)
 {
     // TODO: insert return statement here
