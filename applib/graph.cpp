@@ -183,7 +183,7 @@ void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
 		vector<Edge> sorted(edgeMap[label]);
 		sort(sorted.begin(), sorted.end(),
 			 [](Edge a, Edge b)
-			 { return a.end > b.To; });
+			 { return a.end > b.end; });
 		for (auto edge : sorted)
 		{
 			string other = edge.end;
@@ -293,7 +293,7 @@ int Graph::mst(const string &StartLabel,
 						  int Weight))
 {
 	//Prim's Algo
-	if (directional || !contains(StartLabel))
+	if (DirectionalEdges || !contains(StartLabel))
 	{
 		return -1;
 	}
@@ -324,7 +324,7 @@ int Graph::mst(const string &StartLabel,
 			finished = false;
 			mst[cheapestTo] = true;
 			totalWeight += cheapestWeight;
-			visit(cheapestFrom, cheapestTo, cheapestWeight);
+			Visit(cheapestFrom, cheapestTo, cheapestWeight);
 		}
 	}
 	return totalWeight;
