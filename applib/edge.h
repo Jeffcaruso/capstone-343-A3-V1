@@ -24,13 +24,17 @@ class Edge
   friend Edge &operator==(Edge &v1, Edge &v2);
   friend Edge &operator<(Edge &v1, Edge &v2);
 
+  protected:
+    string start;
+  string end;
+  int weight;
+
+
 private:
   /** constructor with label and weight */
   Edge(Vertex *From, Vertex *To, int Weight);
 
-  string start;
-  string end;
-  int weight;
+
 };
 
 #endif

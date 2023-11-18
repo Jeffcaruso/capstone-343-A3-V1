@@ -18,9 +18,9 @@ Edge::Edge(Vertex *From, Vertex *To, int Weight) {
 
 bool &operator==(Edge &v1, Edge &v2){
     // TODO: insert return statement here
-    if (strcmp(v1.start, v2.start) == 0)
+    if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
     {
-        if (strcmp(v1.end, v2.end) == 0)
+        if (strcmp(v1.end.c_str(), v2.end.c_str()) == 0)
         {
             if(v1.weight == v2.weight)
             {
@@ -34,13 +34,13 @@ bool &operator==(Edge &v1, Edge &v2){
 bool &operator<(Edge &v1, Edge &v2)
 {
     // TODO: insert return statement here
-    if (strcmp(v1.start, v2.start) == 0)
+    if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
     {
         return false;
     }
     else
     {
-        if(strcmp(v1.start, v2.start) < 0)
+        if(strcmp(v1.end.c_str(), v2.end.c_str()) < 0)
         {
             return true;
         }
