@@ -11,6 +11,8 @@
 // forward declaration for class Vertex
 class Vertex;
 
+using namespace std;
+
 class Edge
 {
   friend class Vertex;

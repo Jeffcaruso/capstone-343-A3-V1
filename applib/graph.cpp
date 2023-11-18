@@ -245,13 +245,13 @@ Graph::dijkstra(const string &StartLabel) const
 {
 	map<string, int> weights;
 	map<string, string> previous;
-	if (!contains(startLabel))
+	if (!contains(StartLabel))
 	{
 		return make_pair(weights, previous);
 	}
 	unordered_map<string, bool> visited;
 	set<pair<string, int>, CompareBySecond> verticesToVisit;
-	string nextVisit = startLabel;
+	string nextVisit = StartLabel;
 	while (!nextVisit.empty())
 	{
 		visited[nextVisit] = true;
@@ -279,7 +279,7 @@ Graph::dijkstra(const string &StartLabel) const
 			nextVisit = (*verticesToVisit.begin()).first;
 		}
 	}
-	weights.erase(startLabel);
+	weights.erase(StartLabel);
 	return make_pair(weights, previous);
 }
 
