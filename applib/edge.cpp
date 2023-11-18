@@ -12,3 +12,38 @@ Edge::Edge(Vertex *From, Vertex *To, int Weight) {
     end = (*To).label; 
     weight = Weight;
 }
+
+&operator==(Vertex &v1, Vertex &v2){
+    // TODO: insert return statement here
+    if (strcmp(v1.start, v2.start) == 0)
+    {
+        if (strcmp(v1.end, v2.end) == 0)
+        {
+            if(v1.weight == v2.weight)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+&operator<(Vertex &v1, Vertex &v2)
+{
+    // TODO: insert return statement here
+    if (strcmp(v1.start, v2.start) == 0)
+    {
+        return false;
+    }
+    else
+    {
+        if(strcmp(v1.start, v2.start) < 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}

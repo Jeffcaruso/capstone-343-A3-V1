@@ -16,8 +16,13 @@ using namespace std;
 
 class Edge
 {
+
   friend class Vertex;
+
   friend class Graph;
+
+  friend &operator==(Vertex &v1, Vertex &v2);
+  friend &operator<(Vertex &v1, Vertex &v2);
 
 private:
   /** constructor with label and weight */
