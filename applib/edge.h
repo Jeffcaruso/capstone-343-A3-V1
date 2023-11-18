@@ -17,24 +17,20 @@ using namespace std;
 class Edge
 {
 
-  friend class Vertex;
+	friend class Vertex;
 
-  friend class Graph;
+	friend class Graph;
 
-  friend Edge &operator==(Edge &v1, Edge &v2);
-  friend Edge &operator<(Edge &v1, Edge &v2);
+	friend bool &operator==(Edge &v1, Edge &v2);
+	friend bool &operator<(Edge &v1, Edge &v2);
 
-  protected:
-    string start;
-  string end;
-  int weight;
-
+	string start;
+	string end;
+	int weight;
 
 private:
-  /** constructor with label and weight */
-  Edge(Vertex *From, Vertex *To, int Weight);
-
-
+	/** constructor with label and weight */
+	Edge(Vertex *From, Vertex *To, int Weight);
 };
 
 #endif
