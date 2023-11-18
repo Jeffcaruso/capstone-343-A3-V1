@@ -7,6 +7,7 @@
 #define EDGE_H
 
 #include "vertex.h"
+#include <string>
 
 // forward declaration for class Vertex
 class Vertex;
