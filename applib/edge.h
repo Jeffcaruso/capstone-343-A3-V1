@@ -21,8 +21,8 @@ class Edge
 
   friend class Graph;
 
-  friend &operator==(Vertex &v1, Vertex &v2);
-  friend &operator<(Vertex &v1, Vertex &v2);
+  friend Edge &operator==(Edge &v1, Edge &v2);
+  friend Edge &operator<(Edge &v1, Edge &v2);
 
 private:
   /** constructor with label and weight */

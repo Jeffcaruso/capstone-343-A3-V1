@@ -13,7 +13,7 @@ Edge::Edge(Vertex *From, Vertex *To, int Weight) {
     weight = Weight;
 }
 
-Edge &operator==(Vertex &v1, Vertex &v2){
+Edge &operator==(Edge &v1, Edge &v2){
     // TODO: insert return statement here
     if (strcmp(v1.start, v2.start) == 0)
     {
@@ -28,7 +28,7 @@ Edge &operator==(Vertex &v1, Vertex &v2){
     return false;
 }
 
-Edge &operator<(Vertex &v1, Vertex &v2)
+Edge &operator<(Edge &v1, Edge &v2)
 {
     // TODO: insert return statement here
     if (strcmp(v1.start, v2.start) == 0)
