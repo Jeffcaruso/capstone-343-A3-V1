@@ -72,7 +72,7 @@ jobs:
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test
   Run_Test_2:
-    needs: [build, Run_Test_1]
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Clone GTest
