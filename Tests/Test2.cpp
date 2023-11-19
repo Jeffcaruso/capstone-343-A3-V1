@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 #include "applib/graph.h"
 #include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::runfiles.h
 
 
 #include <iostream>
