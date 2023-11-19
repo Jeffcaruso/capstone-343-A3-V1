@@ -68,7 +68,7 @@ TEST(Test2, Graph0DFS)
 	Graph G;
 	// if (!G.readFile("graph0.txt"))
 	// 	return;
-	EXPECT_TRUE(G.readFile("graph0.txt"));
+	EXPECT_TRUE(G.readFile("applib/graph0.txt"));
 
 	EXPECT_TRUE(G.contains("A")); // a in graph
 	EXPECT_TRUE(G.contains("B")); // b in graph
