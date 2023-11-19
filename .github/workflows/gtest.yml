@@ -75,6 +75,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v1
     - name: Clone GTest
       run:  git clone https://github.com/google/googletest.git
     - name: Install gtest manually
@@ -88,7 +90,6 @@ jobs:
             sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
       run:  sudo apt install -y valgrind
-    - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_2
   Run_Test_3:
