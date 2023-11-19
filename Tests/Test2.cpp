@@ -80,9 +80,10 @@ TEST(Test2, Graph0DFS)
 
 	if (runfiles == nullptr)
 	{
-		... // error handling
+		// error handling
+		cout << "ERROR!!!! here-T2:84" << endl;
 	}
-	string path = runfiles->Rlocation("my_workspace/applib/graph0.txt");
+	string path = runfiles.Rlocation("my_workspace/applib/graph0.txt");
 
 
 
