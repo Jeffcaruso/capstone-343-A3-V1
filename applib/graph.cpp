@@ -112,12 +112,11 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 		}
 	}
 	// Vertex fr(From);
-	// Vertex t(To);	
+	// Vertex t(To);
 	// Edge newEdge(*fr, *t, Weight);
 	Vertex fr(From);
-	Vertex t(To);	
+	Vertex t(To);
 	Edge newEdge(&fr, &t, Weight);
-
 
 	edgeMap[From].push_back(newEdge);
 	if (!DirectionalEdges)
@@ -169,7 +168,8 @@ bool Graph::disconnect(const string &From, const string &To)
 }
 
 // depth-first traversal starting from given startLabel
-void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
+void Graph::dfs(const string &StartLabel, void Visit(const string &Label))
+{
 	if (!contains(StartLabel))
 	{
 		return;
@@ -198,7 +198,6 @@ void Graph::dfs(const string &StartLabel, void Visit(const string &Label)) {
 		}
 	}
 }
-
 
 // breadth-first traversal starting from startLabel
 void Graph::bfs(const string &StartLabel, void Visit(const string &Label))
@@ -232,14 +231,14 @@ void Graph::bfs(const string &StartLabel, void Visit(const string &Label))
 	}
 }
 // used to sort pairs of vertices and weights
-struct CompareBySecond {
-  bool operator()(const std::pair<std::string, int> &a,
-                  const std::pair<std::string, int> &b) const {
-    return a.second > b.second;
-  }
+struct CompareBySecond
+{
+	bool operator()(const std::pair<std::string, int> &a,
+					const std::pair<std::string, int> &b) const
+	{
+		return a.second > b.second;
+	}
 };
-
-
 
 // store the weights in a map
 // store the previous label in a map
@@ -295,7 +294,7 @@ int Graph::mst(const string &StartLabel,
 			   void Visit(const string &From, const string &To,
 						  int Weight))
 {
-	//Prim's Algo
+	// Prim's Algo
 	if (DirectionalEdges || !contains(StartLabel))
 	{
 		return -1;
@@ -339,23 +338,27 @@ int Graph::mst(const string &StartLabel,
 //  to w/o that last const...?
 
 // read a text file and create the graph
-bool Graph::readFile(const char* filename) {
-  ifstream myfile(filename);
-  if (!myfile.is_open()) {
-    cerr << "Failed to open " << filename << endl;
-    return false;
-  }
-  int edges = 0;
-  int weight = 0;
-  string fromVertex;
-  string toVertex;
-  myfile >> edges;
-  for (int i = 0; i < edges; ++i) {
-    myfile >> fromVertex >> toVertex >> weight;
-    connect(fromVertex, toVertex, weight);
-  }
-  myfile.close();
-  return true;
+bool Graph::readFile(const char *filename)
+{
+	TCHAR NPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, NPath);
+	std::cout << NPath << std::endl;
+	ifstream myfile(filename);
+	if (!myfile.is_open())
+	{
+		cerr << "Failed to open " << filename << endl;
+		return false;
+	}
+	int edges = 0;
+	int weight = 0;
+	string fromVertex;
+	string toVertex;
+	myfile >> edges;
+	for (int i = 0; i < edges; ++i)
+	{
+		myfile >> fromVertex >> toVertex >> weight;
+		connect(fromVertex, toVertex, weight);
+	}
+	myfile.close();
+	return true;
 }
-
-
