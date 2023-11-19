@@ -64,7 +64,7 @@ public:
   // each line represents an edge in the form of "string string int"
   // vertex labels cannot contain spaces
   // @return true if file successfully read
-  bool readFile(const string &Filename);
+  bool readFile(const char* Filename);
 
   // depth-first traversal starting from given startLabel
   void dfs(const string &StartLabel, void Visit(const string &Label));

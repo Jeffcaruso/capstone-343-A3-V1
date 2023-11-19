@@ -339,7 +339,7 @@ int Graph::mst(const string &StartLabel,
 //  to w/o that last const...?
 
 // read a text file and create the graph
-bool Graph::readFile(const string &filename) {
+bool Graph::readFile(const char* filename) {
   ifstream myfile(filename.c_str());
   if (!myfile.is_open()) {
     cerr << "Failed to open " << filename << endl;
