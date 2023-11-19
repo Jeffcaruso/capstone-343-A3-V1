@@ -340,9 +340,9 @@ int Graph::mst(const string &StartLabel,
 // read a text file and create the graph
 bool Graph::readFile(const char *filename)
 {
-	TCHAR NPath[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, NPath);
-	std::cout << NPath << std::endl;
+	// TCHAR NPath[MAX_PATH];
+	// GetCurrentDirectory(MAX_PATH, NPath);
+	// std::cout << NPath << std::endl;
 	ifstream myfile(filename);
 	if (!myfile.is_open())
 	{
