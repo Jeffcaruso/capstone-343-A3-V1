@@ -5,7 +5,12 @@ cc_library(
   visibility = ["//visibility:public"],
   hdrs = glob(["**/*.h"]),
   srcs = glob(["*.cpp"]),  # can add other files if needed. But don't want building.cpp! *See description*
+  deps = ["@bazel_tools//tools/cpp/runfiles"],
 )
+
+# cc_binary(
+# 
+# )
 
 # Description
 # including building.cpp will break this becuase google test wants to be have the main method.

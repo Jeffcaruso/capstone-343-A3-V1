@@ -8,6 +8,8 @@
 
 #include <gtest/gtest.h>
 #include "applib/graph.h"
+#include "tools/cpp/runfiles/runfiles.h"
+
 
 #include <iostream>
 #include <sstream>
@@ -65,6 +67,24 @@ static string map2string(const map<K, L> &Mp)
 //detailed == testing
 TEST(Test2, Graph0DFS)
 {
+	// 3.  Create a Runfiles object and use rlocation to look up runfile paths:
+	std::string error;
+	std::unique_ptr<Runfiles> runfiles(
+		Runfiles::Create("graph0.txt", BAZEL_CURRENT_REPOSITORY, &error));
+
+	// Important:
+	//   If this is a test, use
+	//   Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error).
+
+	if (runfiles == nullptr)
+	{
+		... // error handling
+	}
+	std::string path =
+		runfiles->Rlocation("my_workspace/applib/graph0.txt");
+
+
+
 	Graph G;
 	// if (!G.readFile("graph0.txt"))
 	// 	return;
