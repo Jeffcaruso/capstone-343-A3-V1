@@ -99,6 +99,7 @@ TEST(Test2, Graph0DFS)
 	EXPECT_TRUE(G.contains("A")); // a in graph
 	EXPECT_TRUE(G.contains("B")); // b in graph
 	EXPECT_TRUE(G.contains("C")); // c in graph
+	//made it to here w/o error. So, file IO is now working!!
 	string ansStr = "B(1),C(8)";
 	EXPECT_EQ(G.getEdgesAsString("A"), ansStr);
 	ansStr = "C(3)";
