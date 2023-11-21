@@ -61,32 +61,13 @@ static string map2string(const map<K, L> &Mp)
 * Note, if testing is not working as expected, there is a decent chance of some degree of misconfigurations.
 * I.E.   assert(G.contains("A") && "a in graph"); -> EXPECT_TRUE(G.contains("A")); // a in graph
 * 				May not be as correct of an interpretation as I am expecting...
-*
+* NOTE: The only detail to notice here is reviewing if the error output is what I want...
 */
 
 
-//detailed == testing
+
 TEST(Test2, Graph0DFS)
 {
-	//review: https://github.com/bazelbuild/bazel/blob/master/tools/cpp/runfiles/runfiles_src.h 
-	// 3.  Create a Runfiles object and use rlocation to look up runfile paths:
-	// string error;
-	// std::unique_ptr<Runfiles> runfiles(
-	// 	Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error);
-
-	// // Important:
-	// //   If this is a test, use
-	// //   Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error).
-
-	// if (runfiles == nullptr)
-	// {
-	// 	// error handling
-	// 	cout << "ERROR!!!! here-T2:84" << endl;
-	// }
-	// string path = runfiles.Rlocation("__main__/graph0.txt");
-
-
-
 	Graph G;
 	// if (!G.readFile("graph0.txt"))
 	// 	return;
