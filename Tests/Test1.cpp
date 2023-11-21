@@ -52,6 +52,7 @@ static string map2string(const map<K, L> &Mp)
 	return Out.str();
 }
 
+
 TEST(Test1, BasicGraphTesting)
 {
 	Graph G(true);

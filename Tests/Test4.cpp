@@ -52,16 +52,7 @@ static string map2string(const map<K, L> &Mp)
 	return Out.str();
 }
 
-/*
- * Note, if testing is not working as expected, there is a decent chance of some degree of misconfigurations.
- * I.E.   assert(G.contains("A") && "a in graph"); -> EXPECT_TRUE(G.contains("A")); // a in graph
- * 				May not be as correct of an interpretation as I am expecting...
- *
- */
 
-
-
-// detailed == testing
 TEST(Test4, Graph0Dijkstra)
 {
 	// prep graph, read in graph0.txt

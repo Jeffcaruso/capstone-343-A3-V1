@@ -52,13 +52,6 @@ static string map2string(const map<K, L> &Mp)
     return Out.str();
 }
 
-/*
- * Note, if testing is not working as expected, there is a decent chance of some degree of misconfigurations.
- * I.E.   assert(G.contains("A") && "a in graph"); -> EXPECT_TRUE(G.contains("A")); // a in graph
- * 				May not be as correct of an interpretation as I am expecting...
- *
- */
-
 
 // Testing Graph0 with non-directed links
 TEST(Test5, testGraph0NotDirected)
