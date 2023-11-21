@@ -16,6 +16,7 @@ cc_test(
   size = "small",
   srcs = glob(["Test2.cpp"]),
   copts = ["-Iexternal/gtest/include"],
+  data =["//data:graph0.txt"],
   deps = [
     "@com_google_googletest//:gtest_main",
     "//applib:APPLib"

@@ -8,8 +8,8 @@
 
 #include <gtest/gtest.h>
 #include "applib/graph.h"
-#include "tools/cpp/runfiles/runfiles.h"
-using bazel::tools::cpp::runfiles::runfiles.h;
+#include "tools/cpp/runfiles.h"
+//using bazel::tools::cpp::runfiles::runfiles.h;
 
 
 #include <iostream>
@@ -70,20 +70,20 @@ TEST(Test2, Graph0DFS)
 {
 	//review: https://github.com/bazelbuild/bazel/blob/master/tools/cpp/runfiles/runfiles_src.h 
 	// 3.  Create a Runfiles object and use rlocation to look up runfile paths:
-	string error;
-	std::unique_ptr<Runfiles> runfiles(
-		Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error);
+	// string error;
+	// std::unique_ptr<Runfiles> runfiles(
+	// 	Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error);
 
-	// Important:
-	//   If this is a test, use
-	//   Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error).
+	// // Important:
+	// //   If this is a test, use
+	// //   Runfiles::CreateForTest(BAZEL_CURRENT_REPOSITORY, &error).
 
-	if (runfiles == nullptr)
-	{
-		// error handling
-		cout << "ERROR!!!! here-T2:84" << endl;
-	}
-	string path = runfiles.Rlocation("__main__/graph0.txt");
+	// if (runfiles == nullptr)
+	// {
+	// 	// error handling
+	// 	cout << "ERROR!!!! here-T2:84" << endl;
+	// }
+	// string path = runfiles.Rlocation("__main__/graph0.txt");
 
 
 
@@ -91,7 +91,10 @@ TEST(Test2, Graph0DFS)
 	// if (!G.readFile("graph0.txt"))
 	// 	return;
 	//EXPECT_TRUE(G.readFile("applib/graph0.txt"));
-	EXPECT_TRUE(G.readFile(path.c_str()));
+	//EXPECT_TRUE(G.readFile(path.c_str()));
+	EXPECT_TRUE(G.readFile("data/graph0.txt"));
+
+
 
 	EXPECT_TRUE(G.contains("A")); // a in graph
 	EXPECT_TRUE(G.contains("B")); // b in graph
