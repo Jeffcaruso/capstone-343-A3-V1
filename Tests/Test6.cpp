@@ -54,7 +54,7 @@ static string map2string(const map<K, L> &Mp)
 
 
 // Testing Graph1
-TEST(Test5, testGraph1)
+TEST(Test6, testGraph1)
 {
     //trivial test to validate gTest setup
 
