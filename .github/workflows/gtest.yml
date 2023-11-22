@@ -18,9 +18,11 @@ jobs:
             cmake . &&
             make &&
             sudo make install
+    # - name: Install Bazel
+    #   run:  sudo apt install nodejs &&
+    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
-      run:  sudo apt install nodejs &&
-            sudo npm install -g @bazel/bazelisk
+      run: sudo npm install -g @bazel/bazelisk
     - uses: actions/checkout@v1
     #using the create-output.sh as a guide...
     - name: g++ compilation
