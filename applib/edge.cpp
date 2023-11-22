@@ -34,7 +34,7 @@ bool operator==(const Edge &v1, const Edge &v2){
 }
 
 //v1 less than v2
-bool operator<(const Edge &v1, const Edge &v2)
+bool operator<(Edge &v1, Edge &v2)
 {
     if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
     {
@@ -58,7 +58,7 @@ bool operator<(const Edge &v1, const Edge &v2)
 }
 
 //alt option to actually sort...?
-bool cmp(const Edge &v1, const Edge &v2)
+bool cmp(Edge &v1, Edge &v2)
 {
     if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
     {

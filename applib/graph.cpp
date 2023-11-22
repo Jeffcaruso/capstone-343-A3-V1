@@ -71,7 +71,7 @@ string Graph::getEdgesAsString(const string &Label) const
 	}
 	string edgeString;
 	vector<Edge> edges(edgeMap.at(Label));
-	sort(edges.begin(), edges.end(), Edge.cmp());
+	sort(edges.begin(), edges.end(), edges.begin().cmp());
 	for (auto edge : edges)
 	{
 		if (Label == edge.end)
