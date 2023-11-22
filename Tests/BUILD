@@ -28,6 +28,7 @@ cc_test(
   size = "small",
   srcs = glob(["Test3.cpp"]),
   copts = ["-Iexternal/gtest/include"],
+  data =["//data:graph0.txt"],
   deps = [
     "@com_google_googletest//:gtest_main",
     "//applib:APPLib"
@@ -39,6 +40,7 @@ cc_test(
   size = "small",
   srcs = glob(["Test4.cpp"]),
   copts = ["-Iexternal/gtest/include"],
+  data =["//data:graph0.txt"],
   deps = [
     "@com_google_googletest//:gtest_main",
     "//applib:APPLib"
@@ -50,6 +52,7 @@ cc_test(
   size = "small",
   srcs = glob(["Test5.cpp"]),
   copts = ["-Iexternal/gtest/include"],
+  data =["//data:graph0.txt"],
   deps = [
     "@com_google_googletest//:gtest_main",
     "//applib:APPLib"
@@ -61,6 +64,7 @@ cc_test(
   size = "small",
   srcs = glob(["Test6.cpp"]),
   copts = ["-Iexternal/gtest/include"],
+  data =["//data:graph1.txt"],
   deps = [
     "@com_google_googletest//:gtest_main",
     "//applib:APPLib"

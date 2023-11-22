@@ -57,8 +57,8 @@ TEST(Test3, Graph0BFS)
 {
 	//prep graph, read in graph0.txt
 	Graph G;
-	if (!G.readFile("graph0.txt"))
-		return;
+	//read in graph0
+	EXPECT_TRUE(G.readFile("data/graph0.txt"));
 
 	//A
 	Tester::resetSs();

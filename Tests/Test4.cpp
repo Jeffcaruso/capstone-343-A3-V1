@@ -57,8 +57,8 @@ TEST(Test4, Graph0Dijkstra)
 {
 	// prep graph, read in graph0.txt
 	Graph G;
-	if (!G.readFile("graph0.txt"))
-		return;
+	//read in graph 0
+	EXPECT_TRUE(G.readFile("data/graph0.txt"));
 
 	// maps for weights (current) + previous
 	map<string, int> Weights;

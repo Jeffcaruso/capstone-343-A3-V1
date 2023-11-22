@@ -59,8 +59,8 @@ TEST(Test5, testGraph1)
     //trivial test to validate gTest setup
 
     Graph G;
-    if (!G.readFile("graph1.txt"))
-        return;
+    //read in graph1
+    EXPECT_TRUE(G.readFile("data/graph1.txt"));
 
     //5.1 - BFS A
     Tester::resetSs();

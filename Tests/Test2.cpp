@@ -59,10 +59,7 @@ static string map2string(const map<K, L> &Mp)
 TEST(Test2, Graph0DFS)
 {
 	Graph G;
-	// if (!G.readFile("graph0.txt"))
-	// 	return;
-	//EXPECT_TRUE(G.readFile("applib/graph0.txt"));
-	//EXPECT_TRUE(G.readFile(path.c_str()));
+	//read in Graph0
 	EXPECT_TRUE(G.readFile("data/graph0.txt"));
 
 
