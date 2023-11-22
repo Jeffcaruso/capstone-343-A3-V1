@@ -46,13 +46,13 @@ bool operator<(Edge &v1, Edge &v2)
         //I think these are correct, but jist in case I got them flipped, lets see...
         if(strcmp(v1.end.c_str(), v2.end.c_str()) < 0)
         {
-            return true;  //expected
-            //return false;
+            //return true;  //expected
+            return false;
         }
         else
         {
-            return false; // expected
-            //return true;
+            //return false; // expected
+            return true;
         }
     }
 }
