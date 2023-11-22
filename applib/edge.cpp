@@ -47,13 +47,13 @@ bool operator<(Edge &v1, Edge &v2)
         // v#.end.c_str() ?
         if(strcmp(v1.start.c_str(), v2.start.c_str()) < 0)
         {
-            return true;  //expected
-            //return false;
+            //return true;  //expected
+            return false;
         }
         else
         {
-            return false; // expected
-            //return true;
+            //return false; // expected
+            return true;
         }
     }
 }
