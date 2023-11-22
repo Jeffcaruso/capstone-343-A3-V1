@@ -13,6 +13,7 @@
 #include <stack>
 #include <set>
 #include <limits>
+#include <cstring>
 
 using namespace std;
 
