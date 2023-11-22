@@ -28,6 +28,8 @@ class Edge
 	string end;
 	int weight;
 
+	string getStart(Edge &e);
+
 private:
 	/** constructor with label and weight */
 	Edge(Vertex *From, Vertex *To, int Weight);

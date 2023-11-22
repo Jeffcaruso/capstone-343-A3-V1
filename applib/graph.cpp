@@ -65,7 +65,7 @@ bool Graph::contains(const std::string &Label) const { return vertices.find(Labe
 //alt option to actually sort...?
 bool cmp(Edge &v1, Edge &v2)
 {
-    if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
+    if (strcmp(v1.getStart().c_str(), v2.start.getStart().c_str()) == 0)
     {
         return false;
     }
@@ -73,7 +73,7 @@ bool cmp(Edge &v1, Edge &v2)
     {
         //I think these are correct, but jist in case I got them flipped, lets see...
         // v#.end.c_str() ?
-        if(strcmp(v1.start.c_str(), v2.start.c_str()) < 0)
+        if(strcmp(v1.getStart().c_str(), v2.start.getStart().c_str()) < 0)
         {
             return true;  //expected
             //return false;

@@ -9,13 +9,17 @@
 #include <cstring>
 #include <iostream>
 
+string Edge::getStart(Edge &e)
+{
+    return e.start;
+}
 
-Edge::Edge(Vertex *From, Vertex *To, int Weight) {
+Edge::Edge(Vertex *From, Vertex *To, int Weight)
+{
     start = (*From).label; 
     end = (*To).label; 
     weight = Weight;
 }
-
 
 //v1 equal to v2
 bool operator==(const Edge &v1, const Edge &v2){
