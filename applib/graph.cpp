@@ -77,13 +77,13 @@ bool cmp(Edge &v1, Edge &v2)
         // v#.end.c_str() ?
         if(strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
         {
-            //return true;  //expected
-            return false;
+            return true;  //expected
+            //return false;
         }
         else
         {
-            //return false; // expected
-            return true;
+            return false; // expected
+            //return true;
         }
     }
 }
@@ -98,7 +98,7 @@ string Graph::getEdgesAsString(const string &Label) const
 	}
 	string edgeString;
 	vector<Edge> edges(edgeMap.at(Label));
-	sort(edges.begin(), edges.end(), cmp);
+	sort(edges.begin(), edges.end(), cmp());
 	for (auto edge : edges)
 	{
 		if (Label == edge.end)
