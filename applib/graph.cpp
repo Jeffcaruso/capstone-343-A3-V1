@@ -73,8 +73,27 @@ bool cmp(Edge &v1, Edge &v2)
 	}
 	else
 	{
-		return false;
+		//return false;
 		//could add alpha handling here if needed...
+		if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
+		{
+			return false;
+		}
+		else
+		{
+			// I think these are correct, but jist in case I got them flipped, lets see...
+			//  v#.end.c_str() ?
+			if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
+			{
+				return true; // expected
+				// return false;
+			}
+			else
+			{
+				return false; // expected
+				// return true;
+			}
+		}
 	}
 
 

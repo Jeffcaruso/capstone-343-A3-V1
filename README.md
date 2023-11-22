@@ -1,5 +1,5 @@
 # capstone-343-A2-v1
-Capstone automating testing for 343 A2
+Capstone automating testing for 343 A3 (Graph)
 
 ## Jeffrey Caruso - Fall 2023
 
