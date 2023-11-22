@@ -67,7 +67,7 @@ bool Graph::contains(const std::string &Label) const { return vertices.find(Labe
 // <
 bool cmp(Edge &v1, Edge &v2)
 {
-	if(v1.getWeight < v2.getWeight())
+	if(v1.getWeight(v1) < v2.getWeight(v2))
 	{
 		return true;
 	}
