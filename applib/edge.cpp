@@ -14,6 +14,11 @@ string Edge::getStart(Edge &e)
     return e.start;
 }
 
+int Edge::getWeight(Edge &e)
+{
+    return e.weight;
+}
+
 Edge::Edge(Vertex *From, Vertex *To, int Weight)
 {
     start = (*From).label; 

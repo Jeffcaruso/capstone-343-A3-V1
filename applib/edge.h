@@ -29,6 +29,7 @@ class Edge
 	int weight;
 public:
 	string getStart(Edge &e);
+	int getWeight(Edge &e);
 
 private:
 	/** constructor with label and weight */

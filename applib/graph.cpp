@@ -67,25 +67,38 @@ bool Graph::contains(const std::string &Label) const { return vertices.find(Labe
 // <
 bool cmp(Edge &v1, Edge &v2)
 {
-    if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
-    {
-        return false;
-    }
-    else
-    {
-        //I think these are correct, but jist in case I got them flipped, lets see...
-        // v#.end.c_str() ?
-        if(strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
-        {
-            return true;  //expected
-            //return false;
-        }
-        else
-        {
-            return false; // expected
-            //return true;
-        }
-    }
+	if(v1.getWeight < v2.getWeight())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+		//could add alpha handling here if needed...
+	}
+
+
+
+
+    // if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
+    // {
+    //     return false;
+    // }
+    // else
+    // {
+    //     //I think these are correct, but jist in case I got them flipped, lets see...
+    //     // v#.end.c_str() ?
+    //     if(strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
+    //     {
+    //         return true;  //expected
+    //         //return false;
+    //     }
+    //     else
+    //     {
+    //         return false; // expected
+    //         //return true;
+    //     }
+    // }
 }
 
 // @return string representing edges and weights, "" if vertex not found
