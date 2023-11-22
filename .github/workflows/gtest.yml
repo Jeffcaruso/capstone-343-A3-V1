@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ main, TSC1 ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, TSC1  ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -18,38 +18,11 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - uses: actions/checkout@v1
-    #using the create-output.sh as a guide...
     - name: g++ compilation
       run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp
-
-    # was at least able to get this part working while not breaking the gTest + bazel. 
-    # The rest will also need to be added as well, but for now, this is a good stopping point it working tonight...
-
-
-    #current plan early morning 10/27:
-    # 1) Get other 'old' tests put in her for build... (excluding valgrind...)
-    # 2) Once it works, get rid of the mess of comments directly below this...
-
-
-    #for g++ to find the files headers (and code files), they need to be in same directory.
-    # so realistically, that would mean either:
-    # 1) copy headers to Src folder too... (bazel uses .cpp for src, so prob ok) - failed
-    # 2) implement all at same level (undoing folders, would have to modify bazel scripts (not preferred))
-    # 3) Determine how necessary the other testing is beyond Bazel test + Valgrind which is working great...
-        # i.e., even in the example output, it shows leaving some clang tidys not fixed (including not just making a -1 index var for 2 tests using -9,-10).
-
-    # other option is I could just make a folder to use for this, having copies made automatically. i.e., cp src/pokedex.cpp buildTest/pokedex.cpp.
-
-    # plan moving forward is: #1 (if this works, and its not a large effort to include, do so); 
-            # Then #3 (if this is not really being used that much anyways as a criteria, do we need it at all?);
-            # last #2 (redoing the Bazel scripts to accomodate that layout change would be relatively time consuming...)
-
     - name: clang tidy build
       run: clang++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp
 
@@ -65,9 +38,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -89,9 +59,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -110,9 +77,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -132,9 +96,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -155,9 +116,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -178,9 +136,6 @@ jobs:
             cmake . &&
             make &&
             sudo make install
-    # - name: Install Bazel
-    #   run:  sudo apt install nodejs &&
-    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
@@ -197,6 +152,6 @@ jobs:
       # 2) copy the content from one of the run tests (not build)
       # 3) modify the Build file in the testing folder that holds these test scripts.
 
-      # additional note, user code expected in: Src, Inc
+      # additional note, user code expected in: applib. Data in data.
 
       
