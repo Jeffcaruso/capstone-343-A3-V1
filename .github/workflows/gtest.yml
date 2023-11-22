@@ -63,9 +63,11 @@ jobs:
             cmake . &&
             make &&
             sudo make install
+    # - name: Install Bazel
+    #   run:  sudo apt install nodejs &&
+    #         sudo npm install -g @bazel/bazelisk
     - name: Install Bazel
-      run:  sudo apt install nodejs &&
-            sudo npm install -g @bazel/bazelisk
+      run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
       run:  sudo apt install -y valgrind
     - uses: actions/checkout@v1
