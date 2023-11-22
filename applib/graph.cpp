@@ -61,6 +61,31 @@ bool Graph::add(const string &Label)
 /** return true if vertex already in graph */
 bool Graph::contains(const std::string &Label) const { return vertices.find(Label) != vertices.end(); }
 
+
+//alt option to actually sort...?
+bool cmp(Edge &v1, Edge &v2)
+{
+    if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
+    {
+        return false;
+    }
+    else
+    {
+        //I think these are correct, but jist in case I got them flipped, lets see...
+        // v#.end.c_str() ?
+        if(strcmp(v1.start.c_str(), v2.start.c_str()) < 0)
+        {
+            return true;  //expected
+            //return false;
+        }
+        else
+        {
+            return false; // expected
+            //return true;
+        }
+    }
+}
+
 // @return string representing edges and weights, "" if vertex not found
 // A-3->B, A-5->C should return B(3),C(5)
 string Graph::getEdgesAsString(const string &Label) const
@@ -71,7 +96,7 @@ string Graph::getEdgesAsString(const string &Label) const
 	}
 	string edgeString;
 	vector<Edge> edges(edgeMap.at(Label));
-	sort(edges.begin(), edges.end(), edges.begin().cmp());
+	sort(edges.begin(), edges.end(), cmp);
 	for (auto edge : edges)
 	{
 		if (Label == edge.end)
