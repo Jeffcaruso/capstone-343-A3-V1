@@ -27,7 +27,7 @@ class Edge
 	string start;
 	string end;
 	int weight;
-
+public:
 	string getStart(Edge &e);
 
 private:
