@@ -56,6 +56,7 @@ static string map2string(const map<K, L> &Mp)
 }
 
 
+/// @brief GTest method for this file
 TEST(Test2, Graph0DFS)
 {
 	Graph G;

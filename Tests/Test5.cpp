@@ -53,7 +53,7 @@ static string map2string(const map<K, L> &Mp)
 }
 
 
-// Testing Graph0 with non-directed links
+/// @brief GTest method for this file
 TEST(Test5, testGraph0NotDirected)
 {
     //prep non-directional graph
@@ -90,8 +90,7 @@ TEST(Test5, testGraph0NotDirected)
     EXPECT_TRUE(Tester::getSs().empty()); // starting from X
 
 
-
-    // Testing Pt.2.. (also not sure, consider if this can be safely moved to a second test method in this file...)
+    //general focus shifting to the second sub-category of testing in this method
 
     // 5.2.1
     map<string, int> Weights;
@@ -102,7 +101,6 @@ TEST(Test5, testGraph0NotDirected)
     EXPECT_EQ(map2string(Weights), ansStr); // Dijkstra(A) weights
     ansStr = "[B:A][C:B]";
     EXPECT_EQ(map2string(Previous), ansStr); // Dijkstra(A) previous
-
 
     // 5.2.2
     ansStr = "B";

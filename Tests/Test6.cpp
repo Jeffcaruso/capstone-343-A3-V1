@@ -53,11 +53,9 @@ static string map2string(const map<K, L> &Mp)
 }
 
 
-// Testing Graph1
+/// @brief GTest method for this file
 TEST(Test6, testGraph1)
 {
-    //trivial test to validate gTest setup
-
     Graph G;
     //read in graph1
     EXPECT_TRUE(G.readFile("data/graph1.txt"));
