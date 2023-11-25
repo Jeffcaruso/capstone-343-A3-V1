@@ -80,30 +80,6 @@ bool cmp(Edge &v1, Edge &v2)
 			return false;
 		}
 	}
-
-	// if(v1.getWeight(v1) < v2.getWeight(v2))
-	// {
-	// 	return true;
-	// }
-	// else
-	// {
-	// 	//alphabetical handling
-	// 	if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
-	// 	{
-	// 		return false;
-	// 	}
-	// 	else
-	// 	{
-	// 		if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
-	// 		{
-	// 			return true;
-	// 		}
-	// 		else
-	// 		{
-	// 			return false;
-	// 		}
-	// 	}
-	// }
 }
 
 // @return string representing edges and weights, "" if vertex not found

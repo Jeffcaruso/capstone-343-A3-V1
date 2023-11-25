@@ -50,7 +50,6 @@ bool operator==(const Edge &v1, const Edge &v2){
 //v1 less than v2
 bool operator<(Edge &v1, Edge &v2)
 {
-
     if (strcmp(v1.end.c_str(), v2.end.c_str()) < 0)
     {
         return true; // expected
@@ -58,31 +57,9 @@ bool operator<(Edge &v1, Edge &v2)
     }
     else
     {
-        return false; // expected
-        // return true;
+        //would also include == -> false
+        return false;
     }
-
-
-
-    // if (strcmp(v1.start.c_str(), v2.start.c_str()) == 0)
-    // {
-    //     return false;
-    // }
-    // else
-    // {
-    //     //I think these are correct, but jist in case I got them flipped, lets see...
-    //     // v#.end.c_str() ?
-    //     if(strcmp(v1.start.c_str(), v2.start.c_str()) < 0)
-    //     {
-    //         return true;  //expected
-    //         //return false;
-    //     }
-    //     else
-    //     {
-    //         return false; // expected
-    //         //return true;
-    //     }
-    // }
 }
 
 
