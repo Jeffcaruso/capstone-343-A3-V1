@@ -1,8 +1,15 @@
+//============================================================================
+// Name        : Edge.h
+// Desc/       : See comment below
+// Author      : Jeffrey Caruso, Yusuf Pisan
+// Date    	   : Fall 2023
+//============================================================================
 /**
  * Edge is the simplest structure of the graph
  * All edges are directed
  * Each edge belongs to a vertex
  */
+
 #ifndef EDGE_H
 #define EDGE_H
 

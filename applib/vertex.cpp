@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Vertex.cpp
+// Desc/       : Implement vertex.h, See comment below
+// Author      : Jeffrey Caruso, Yusuf Pisan
+// Date    	   : Fall 2023
+//============================================================================
 /**
  * A Graph is made up of Vertex objects that hold data values
  * A vertex is connected to other vertices via Edges

@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Graph.h
+// Desc.       : See comment below
+// Author      : Jeffrey Caruso, Yusuf Pisan
+// Date    	   : Fall 2023
+//============================================================================
 /**
  * A graph is made up of vertices and edges.
  * Vertex labels are unique.
