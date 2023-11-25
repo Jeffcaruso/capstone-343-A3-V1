@@ -21,8 +21,6 @@ Graph::Graph(bool directedEdges) { DirectionalEdges = directedEdges; }
 
 Graph::~Graph() {}
 
-// bool Graph::readFile(const string &Filename) { return true; }
-
 // @return total number of vertices
 int Graph::verticesSize() const { return vertices.size(); }
 
@@ -63,61 +61,49 @@ bool Graph::add(const string &Label)
 bool Graph::contains(const std::string &Label) const { return vertices.find(Label) != vertices.end(); }
 
 
-//alt option to actually sort...?
+//Sorting Algo
 // <
 bool cmp(Edge &v1, Edge &v2)
 {
-	if(v1.getWeight(v1) < v2.getWeight(v2))
+	if (strcmp(v1.getEnd(v1).c_str(), v2.getEnd(v2).c_str()) == 0)
 	{
-		return true;
+		return false;
 	}
 	else
 	{
-		//return false;
-		//could add alpha handling here if needed...
-		if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
+		if (strcmp(v1.getEnd(v1).c_str(), v2.getEnd(v2).c_str()) < 0)
 		{
-			return false;
+			return true;
 		}
 		else
 		{
-			// I think these are correct, but jist in case I got them flipped, lets see...
-			//  v#.end.c_str() ?
-			if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
-			{
-				return true; // expected
-				// return false;
-			}
-			else
-			{
-				return false; // expected
-				// return true;
-			}
+			return false;
 		}
 	}
 
-
-
-
-    // if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
-    // {
-    //     return false;
-    // }
-    // else
-    // {
-    //     //I think these are correct, but jist in case I got them flipped, lets see...
-    //     // v#.end.c_str() ?
-    //     if(strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
-    //     {
-    //         return true;  //expected
-    //         //return false;
-    //     }
-    //     else
-    //     {
-    //         return false; // expected
-    //         //return true;
-    //     }
-    // }
+	// if(v1.getWeight(v1) < v2.getWeight(v2))
+	// {
+	// 	return true;
+	// }
+	// else
+	// {
+	// 	//alphabetical handling
+	// 	if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) == 0)
+	// 	{
+	// 		return false;
+	// 	}
+	// 	else
+	// 	{
+	// 		if (strcmp(v1.getStart(v1).c_str(), v2.getStart(v2).c_str()) < 0)
+	// 		{
+	// 			return true;
+	// 		}
+	// 		else
+	// 		{
+	// 			return false;
+	// 		}
+	// 	}
+	// }
 }
 
 // @return string representing edges and weights, "" if vertex not found
@@ -170,9 +156,6 @@ bool Graph::connect(const string &From, const string &To, int Weight)
 			return false;
 		}
 	}
-	// Vertex fr(From);
-	// Vertex t(To);
-	// Edge newEdge(*fr, *t, Weight);
 	Vertex fr(From);
 	Vertex t(To);
 	Edge newEdge(&fr, &t, Weight);
@@ -390,11 +373,6 @@ int Graph::mst(const string &StartLabel,
 	}
 	return totalWeight;
 }
-// maybe need to remove const at end of this !!!!!!!!!!!!!!!!!!!!!!!!!
-// int Graph::mst(const string &StartLabel,
-//                void Visit(const string &From, const string &To,
-//                           int Weight)) const {
-//  to w/o that last const...?
 
 // read a text file and create the graph
 bool Graph::readFile(const char *filename)

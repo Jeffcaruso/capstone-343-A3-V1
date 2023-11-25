@@ -88,8 +88,6 @@ public:
   int mst(const string &StartLabel,
           void Visit(const string &From, const string &To, int Weight));
 
-          //also trying w/o const!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
 private:
   // default is directional edges is true,
