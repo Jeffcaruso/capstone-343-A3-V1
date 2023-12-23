@@ -22,7 +22,7 @@ jobs:
       run: sudo npm install -g @bazel/bazelisk
     - uses: actions/checkout@v1
     - name: g++ compilation
-      run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp  -o bld.out building.cpp
+      run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare -o bld.out applib/*.cpp building.cpp
     - name: clang tidy build
       run: clang++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp  
     - name: Install Valgrind
