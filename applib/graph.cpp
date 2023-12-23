@@ -142,7 +142,8 @@ pair<map<string, int>, map<string, string>>
 Graph::dijkstra(const string &StartLabel) const
 {
 	//Your code here
-
+	map<string, int> weights;
+	map<string, string> previous;
 
 	return make_pair(weights, previous);
 }
