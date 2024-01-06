@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ main, Solution, Starter ]
+    branches: [ Starter, Solution ]
   pull_request:
-    branches: [ main, Solution, Starter ]
+    branches: [ Starter, Solution ]
   workflow_dispatch:
 
 jobs:
