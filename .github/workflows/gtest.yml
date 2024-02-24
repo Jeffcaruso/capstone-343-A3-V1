@@ -4,169 +4,78 @@ on:
     branches: [ Starter, Solution ]
   pull_request:
     branches: [ Starter, Solution ]
-  workflow_dispatch:
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - uses: actions/checkout@v1
-    - name: g++ compilation
-      run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare -o bld.out applib/*.cpp building.cpp
-    - name: clang tidy build
-      run: clang++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp  
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - name: run it
-      run: valgrind --leak-check=full --errors-for-leak-kinds=definite --track-origins=yes --error-exitcode=3 ./bld.out
+    - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test0.cpp graph.cpp edge.cpp vertex.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
 
-
-
-
-
-  Run_Test_1:
+  test1:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - uses: actions/checkout@v1
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test
-  Run_Test_2:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_2
-  Run_Test_3:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - uses: actions/checkout@v1
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_3
-  Run_Test_4:
-    needs: build 
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - uses: actions/checkout@v1
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_4
-  
-  Run_Test_5:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - uses: actions/checkout@v1
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite -s --track-origins=yes --smc-check=all --error-exitcode=3' --test_output=all //Tests:APP_test_5
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test1.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
 
-  Run_Test_6:
-    needs: build 
+  test2:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
-    - name: Install Bazel
-      run: sudo npm install -g @bazel/bazelisk
-    - name: Install Valgrind
-      run:  sudo apt update;
-            sudo apt install -y valgrind
-    - uses: actions/checkout@v1
-    - name: Run Test
-      run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite -s --track-origins=yes --smc-check=all --error-exitcode=3' --test_output=all //Tests:APP_test_6
-      
-      # smc-checl=all (support for nested functions) https://linux.die.net/man/1/valgrind 
-      # --track-origins=yes https://stackoverflow.com/questions/2612447/pinpointing-conditional-jump-or-move-depends-on-uninitialized-values-valgrin
-      
-      #Note to add /remove tests:
-      # 1) make the job here Run_Test_#
-      # 2) copy the content from one of the run tests (not build)
-      # 3) modify the Build file in the testing folder that holds these test scripts.
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test2.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
 
-      # additional note, user code expected in: applib. Data in data.
-      
-      
+  test3:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test3.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test4:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test4.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
