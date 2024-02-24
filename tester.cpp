@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Tester 
+// File Desc.  : Support Google Test files. implement tester.
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #include <iostream>
 #include <sstream>
 #include <string>

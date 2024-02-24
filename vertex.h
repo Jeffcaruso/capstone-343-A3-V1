@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Vertex 
+// File Desc.  : Define Vertex
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #ifndef VERTEX_H
 #define VERTEX_H
 

@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Tester 
+// File Desc.  : define testers
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #pragma once
 
 #include <iostream>
@@ -25,9 +31,6 @@ public:
 	// visitor function used for edges for minimum spanning tree
 	static void edgeVisitor(const string &From, const string &To, int Weight);
 
-    // // convert a map to a string so we can compare it
-    // template <typename K, typename L>
-    // static string map2string(const map<K, L> &Mp);
 };
 
 // // initialize the static variable

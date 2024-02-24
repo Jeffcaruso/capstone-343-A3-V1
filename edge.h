@@ -1,3 +1,10 @@
+//============================================================================
+// Name        : Edge
+// File Desc.  : define edge
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
+
 #ifndef EDGE_H
 #define EDGE_H
 

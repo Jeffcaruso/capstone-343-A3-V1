@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Graph
+// File Desc.  : define Graph
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 /**
  * A graph is made up of vertices and edges.
  * Vertex labels are unique.

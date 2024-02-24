@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Graph
+// File Desc.  : implement Graph
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #include "graph.h"
 #include <algorithm>
 #include <climits>

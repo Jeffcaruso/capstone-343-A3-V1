@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Vertex 
+// File Desc.  : Implement Vertex
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #include "vertex.h"
 
 /// destructor()
