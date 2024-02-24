@@ -19,7 +19,7 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test0.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test0.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
@@ -33,7 +33,7 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test1.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test1.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
@@ -47,7 +47,7 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test2.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test2.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
@@ -61,7 +61,7 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test3.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test3.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
@@ -75,7 +75,34 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test4.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test4.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
+  test5:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test5.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test6:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ Test6.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
