@@ -536,7 +536,7 @@ Vertex *Graph::extractMin(map<Vertex *, int> &sVertices) {
 // @param startLabel Starting vertex.
 // @param visit Method recording traversal.
 // @return Int of the minimum spanning tree size.
-//mst
+//mst prim
 int Graph::mst(const string &startLabel,
                    void visit(const string &from, const string &to,
                               int weight)) const {

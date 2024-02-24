@@ -115,6 +115,7 @@ public:
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
+  //mstPrim
   int mst(const string &startLabel,
               void visit(const string &from, const string &to,
                          int weight)) const;
