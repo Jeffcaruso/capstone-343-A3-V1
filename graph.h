@@ -8,87 +8,32 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <climits>
+#include "edge.h"
+#include "vertex.h"
 #include <map>
-#include <set>
-#include <sstream>
-#include <stack>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
 
 class Graph {
-private:
-  // Edge strcture, each edge connects
-  // two vertices and has a weight value
-  struct Edge {
-    string fromVertex;
-    string toVertex;
-    int weight;
-  };
-
-  // Vertex structure, each vertex has a label
-  // and a list for incoming and outgoing edges
-  struct Vertex {
-    string label;
-    vector<Edge> incomingEdges;
-    vector<Edge> outgoingEdges;
-  };
-
-  // number of vertices in graph
-  int vertices{0};
-
-  // enable directional edges, default is true
-  bool directionalEdges{true};
-
-  // vector list containing all edges
-  vector<Edge> edgeList;
-
-  // map containing all vertices
-  unordered_map<string, Vertex> vertexMap; // Map of label to vertex
-
-  // UnionFind structure for Kruskal's algorithm
-  struct UnionFind {
-    unordered_map<string, string> parent;
-    unordered_map<string, int> rank;
-  };
-
-  // helper function for Kruskal's algorithm to make a set for a vertex
-  static void makeSet(UnionFind &uf, const std::string &vertex);
-
-  // helper function for Kruskal's algorithm to find a vertex in the graph
-  static string find(UnionFind &uf, const std::string &vertex);
-
-  // helper function for Kruskal's algorithm to union two sets
-  static bool unionSets(UnionFind &uf, const std::string &vertex1,
-                        const std::string &vertex2);
-
 public:
+  friend class Edge;
+  friend class Vertex;
+
   // constructor, empty graph
-  explicit Graph(bool directionalEdges = true);
-
-  // copy not allowed
-  Graph(const Graph &other) = delete;
-
-  // move not allowed
-  Graph(Graph &&other) = delete;
-
-  // assignment not allowed
-  Graph &operator=(const Graph &other) = delete;
-
-  // move assignment not allowed
-  Graph &operator=(Graph &&other) = delete;
+  explicit Graph(bool DirectionalEdges = true);
 
   /** destructor, delete all vertices and edges */
   ~Graph();
 
   // @return true if vertex added, false if it already is in the graph
-  bool add(const string &label);
+  bool add(const string &Label);
 
   // @return true if vertex is in the graph
-  bool contains(const string &label) const;
+  bool contains(const string &Label) const;
 
   // @return total number of vertices
   int verticesSize() const;
@@ -98,35 +43,35 @@ public:
   // For digraphs (directed graphs), only one directed edge allowed, P->Q
   // Undirected graphs must have P->Q and Q->P with same weight
   // @return true if successfully connected
-  bool connect(const string &from, const string &to, int weight = 0);
+  bool connect(const string &From, const string &To, int Weight = 0);
 
   // Remove edge from graph
   // @return true if edge successfully deleted
-  bool disconnect(const string &from, const string &to);
+  bool disconnect(const string &From, const string &To);
 
   // @return total number of edges
   int edgesSize() const;
 
   // @return number of edges from given vertex, -1 if vertex not found
-  int neighborsSize(const string &label) const;
+  int neighborsSize(const string &Label) const;
 
   // @return string representing edges and weights, "" if vertex not found
   // A-3->B, A-5->C should return B(3),C(5)
-  string getEdgesAsString(const string &label) const;
+  string getEdgesAsString(const string &Label) const;
 
   // Read edges from file
   // first line of file is an integer, indicating number of edges
   // each line represents an edge in the form of "string string int"
   // vertex labels cannot contain spaces
   // @return true if file successfully read
-  bool readFile(const string &filename);
+  bool readFile(const char* Filename);
 
   // depth-first traversal starting from given startLabel
-  void dfs(const string &startLabel, void visit(const string &label));
+  void dfs(const string &StartLabel, void Visit(const string &Label));
 
   // breadth-first traversal starting from startLabel
   // call the function visit on each vertex label */
-  void bfs(const string &startLabel, void visit(const string &label));
+  void bfs(const string &StartLabel, void Visit(const string &Label));
 
   // dijkstra's algorithm to find shortest distance to all other vertices
   // and the path to all other vertices
@@ -134,23 +79,26 @@ public:
   // How to get to the vertex is recorded previous["F"] = "C"
   // @return a pair made up of two map objects, Weights and Previous
   pair<map<string, int>, map<string, string>>
-  dijkstra(const string &startLabel) const;
+  dijkstra(const string &StartLabel) const;
 
-  // minimum spanning tree using Prim's algorithm
+  // minimum spanning tree
   // ONLY works for NONDIRECTED graphs
   // ASSUMES the edge [P->Q] has the same weight as [Q->P]
   // @return length of the minimum spanning tree or -1 if start vertex not
-  int mst(const string &startLabel,
-              void visit(const string &from, const string &to,
-                         int weight)) const;
+  int mst(const string &StartLabel,
+          void Visit(const string &From, const string &To, int Weight));
 
-  // minimum spanning tree using Kruskal's algorithm
-  // ONLY works for NONDIRECTED graphs
-  // ASSUMES the edge [P->Q] has the same weight as [Q->P]
-  // @return length of the minimum spanning tree or -1 if start vertex not
-  int mstKruskal(void visit(const string &from, const string &to, int weight));
 
-  void printEdges();
+private:
+  // default is directional edges is true,
+  // can only be modified when graph is initially created
+  // when set to false,
+  // create 2 edges, one from P->Q and another from Q->P with same weight
+  bool DirectionalEdges;
+
+  // add additional variables and functions as needed
+  unordered_map<string, vector<Edge>> edgeMap;
+  unordered_set<string> vertices;
 };
 
 #endif // GRAPH_H
