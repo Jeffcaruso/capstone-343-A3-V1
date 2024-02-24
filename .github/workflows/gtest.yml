@@ -19,7 +19,7 @@ jobs:
     - name: remove un-needed gtest files
       run:  rm -rf googletest
     - name: Build the project
-      run: g++ Test0.cpp graph.cpp edge.cpp vertex.cpp -lgtest -lgtest_main -pthread
+      run: g++ Test0.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
 
