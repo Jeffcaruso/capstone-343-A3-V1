@@ -1,3 +1,9 @@
+//============================================================================
+// Name        : Tester 
+// File Desc.  : Support Google Test files. implement tester.
+// Author(s)   : Yusuf Pisan pisan@uw.edu, Jeffrey Caruso jc12321@uw.edu
+// Date    	   : Fall 2023
+//============================================================================
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -26,16 +32,6 @@ void Tester::edgeVisitor(const string &From, const string &To, int Weight)
     SS << "[" << From << To << " " << Weight << "]";
 }
 
-// // convert a map to a string so we can compare it
-// template <typename K, typename L>
-// string Tester::map2string(const map<K, L> &Mp)
-// {
-//     stringstream Out;
-//     for (auto &P : Mp)
-//         Out << "[" << P.first << ":" << P.second << "]";
-//     return Out.str();
-// }
-
-// // initialize the static variable
-// // NOLINTNEXTLINE
+// initialize the static variable
+// NOLINTNEXTLINE
 stringstream Tester::SS;
