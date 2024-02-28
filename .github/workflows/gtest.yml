@@ -132,3 +132,4 @@ jobs:
       run: g++ Test6.cpp graph.cpp edge.cpp vertex.cpp tester.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: valgrind ./a.out
+      
